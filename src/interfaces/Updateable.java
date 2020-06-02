@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface Updateable {
-    public void update(int millis);
+    void update(int millis);
 }

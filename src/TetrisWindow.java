@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-enum GameState {RUNNING, PAUSED, EXIT};
+enum GameState {RUNNING, PAUSED, EXIT}
 
 public class TetrisWindow extends Frame {
     GameState currentState = GameState.RUNNING;

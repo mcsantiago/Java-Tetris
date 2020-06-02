@@ -3,18 +3,16 @@ package shapes;
 import java.awt.*;
 
 public class LineShape extends Shape {
-    Color color = Color.yellow;
-
     public LineShape(int xPos, int yPos) {
         super(xPos, yPos);
-        squares.add(new UnitSquare(xPos, yPos, 30, color));
-        squares.add(new UnitSquare(xPos + 30, yPos, 30, color));
-        squares.add(new UnitSquare(xPos + 60, yPos, 30, color));
-        squares.add(new UnitSquare(xPos + 90, yPos, 30, color));
+        squares.add(new UnitSquare(xPos, yPos, getColor()));
+        squares.add(new UnitSquare(xPos + 1, yPos, getColor()));
+        squares.add(new UnitSquare(xPos + 2, yPos, getColor()));
+        squares.add(new UnitSquare(xPos + 3, yPos, getColor()));
     }
 
     @Override
-    public void update(int millis) {
-
+    public Color getColor() {
+        return Color.yellow;
     }
 }
