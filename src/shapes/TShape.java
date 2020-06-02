@@ -8,7 +8,7 @@ public class TShape extends Shape {
         squares.add(new UnitSquare(xPos, yPos, getColor()));
         squares.add(new UnitSquare(xPos + 1, yPos, getColor()));
         squares.add(new UnitSquare(xPos + 2, yPos, getColor()));
-        squares.add(new UnitSquare(xPos + 1, yPos + 1,  getColor()));
+        squares.add(new UnitSquare(xPos + 1, yPos - 1,  getColor()));
     }
 
     @Override

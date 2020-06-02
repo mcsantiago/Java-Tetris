@@ -1,5 +1,5 @@
-import shapes.Shape;
 import shapes.*;
+import shapes.Shape;
 import utils.GraphicsUtils;
 
 import java.awt.*;
@@ -24,10 +24,10 @@ public class TetrisMainCanvas extends Canvas {
         xPos = 10;
         yPos = 10;
         shapes = new ArrayList<>();
-        shapes.add(new SquareShape(0, 0));
-        shapes.add(new LineShape(0, 2));
-        shapes.add(new TShape(0, 3));
-        shapes.add(new LShape(0, 4));
+        shapes.add(new SquareShape((canvasSquareWidth / 2) - 1, canvasSquareHeight-1));
+//        shapes.add(new LineShape(0, 2));
+//        shapes.add(new TShape(0, 3));
+//        shapes.add(new LShape(0, 4));
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
     }
@@ -36,7 +36,11 @@ public class TetrisMainCanvas extends Canvas {
      * Updates the entire canvas
      */
     public void update() {
-
+        // Move active square down by 1
+        Shape activeShape = shapes.get(0);
+        for (UnitSquare square : activeShape.getSquares()) {
+            square.decCanvasY();
+        }
     }
 
     /**
@@ -53,6 +57,8 @@ public class TetrisMainCanvas extends Canvas {
             }
         }
 
+
+        // Current shapes
         for (Shape shape : shapes) {
             for (UnitSquare square : shape.getSquares()) {
                 drawUnit(square, g);
@@ -62,6 +68,7 @@ public class TetrisMainCanvas extends Canvas {
 
     /**
      * Draws a unit square
+     *
      * @param square
      * @param g
      */
@@ -70,11 +77,12 @@ public class TetrisMainCanvas extends Canvas {
                 square.getCanvasX() < 0 ||
                 square.getCanvasY() > canvasSquareHeight ||
                 square.getCanvasY() < 0) {
-            throw new IndexOutOfBoundsException("Canvas position out of bounds");
+            throw new IndexOutOfBoundsException("Square position out of bounds of Canvas: (" + square.getCanvasX() + ", " + square.getCanvasY() + ")");
         }
 
         int x = xPos + (square.getCanvasX() * uLength);
-        int y = yPos + (square.getCanvasY() * uLength);
+        int maxY = (canvasSquareHeight * uLength);
+        int y = maxY - (yPos + (square.getCanvasY() * uLength)); // Invert the y axis
 
         g.setColor(square.getColor());
         g.fillRect(x, y, uLength, uLength);

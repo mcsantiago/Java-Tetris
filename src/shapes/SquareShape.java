@@ -7,8 +7,8 @@ public class SquareShape extends Shape {
         super(xPos, yPos);
         squares.add(new UnitSquare(xPos, yPos, getColor()));
         squares.add(new UnitSquare(xPos + 1, yPos, getColor()));
-        squares.add(new UnitSquare(xPos + 1, yPos + 1, getColor()));
-        squares.add(new UnitSquare(xPos, yPos + 1, getColor()));
+        squares.add(new UnitSquare(xPos + 1, yPos - 1, getColor()));
+        squares.add(new UnitSquare(xPos, yPos - 1, getColor()));
     }
 
     @Override

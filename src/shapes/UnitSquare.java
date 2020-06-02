@@ -24,4 +24,19 @@ public class UnitSquare {
     public Color getColor() {
         return color;
     }
+
+    /** Decrements CanvasX by 1 */
+    public void incCanvasX() {
+        this.canvasX++;
+    }
+
+    /** Increments CanvasY by 1 */
+    public void incCanvasY() {
+        this.canvasY++;
+    }
+
+    /** Decrements CanvasY by 1 */
+    public void decCanvasY() {
+        this.canvasY--;
+    }
 }
