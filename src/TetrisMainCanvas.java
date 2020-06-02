@@ -49,33 +49,34 @@ public class TetrisMainCanvas extends Canvas {
         // Draw the debug grid lines
         for (int x = 0; x < canvasSquareWidth; x++) {
             for (int y = 0; y < canvasSquareHeight; y++) {
-                drawUnit(x, y, Color.white, g);
+                drawUnit(new UnitSquare(x, y, Color.WHITE), g);
             }
         }
 
         for (Shape shape : shapes) {
             for (UnitSquare square : shape.getSquares()) {
-                drawUnit(square.getCanvasX(), square.getCanvasY(), square.getColor(), g);
+                drawUnit(square, g);
             }
         }
     }
 
     /**
      * Draws a unit square
-     * @param canvasX
-     * @param canvasY
-     * @param color
+     * @param square
      * @param g
      */
-    private void drawUnit(int canvasX, int canvasY, Color color, Graphics g) {
-        if (canvasX > canvasSquareWidth || canvasX < 0 || canvasY > canvasSquareHeight || canvasY < 0) {
+    private void drawUnit(UnitSquare square, Graphics g) {
+        if (square.getCanvasX() > canvasSquareWidth ||
+                square.getCanvasX() < 0 ||
+                square.getCanvasY() > canvasSquareHeight ||
+                square.getCanvasY() < 0) {
             throw new IndexOutOfBoundsException("Canvas position out of bounds");
         }
 
-        int x = xPos + (canvasX * uLength);
-        int y = yPos + (canvasY * uLength);
+        int x = xPos + (square.getCanvasX() * uLength);
+        int y = yPos + (square.getCanvasY() * uLength);
 
-        g.setColor(color);
+        g.setColor(square.getColor());
         g.fillRect(x, y, uLength, uLength);
 
         Graphics2D g2 = (Graphics2D) g;
