@@ -7,7 +7,9 @@ import java.awt.event.WindowEvent;
 enum GameState {RUNNING, PAUSED, EXIT}
 
 public class TetrisWindow extends Frame {
+    private static final double MS_PER_UPDATE = 200;
     GameState currentState = GameState.RUNNING;
+    TetrisMainCanvas canvas = new TetrisMainCanvas();
 
     private void init() {
         addWindowListener(new WindowAdapter() {
@@ -32,7 +34,7 @@ public class TetrisWindow extends Frame {
         });
         setLayout(new GridLayout(1, 2));
         setSize(600, 800);
-        add(new TetrisMainCanvas());
+        add(canvas);
         setVisible(true);
     }
 
@@ -50,9 +52,26 @@ public class TetrisWindow extends Frame {
 
     public void run() {
         init();
-//        while (currentState == GameState.RUNNING ||
-//                currentState == GameState.PAUSED) {
-//            repaint();
-//        }
+
+        double lastTime = System.currentTimeMillis();
+        double lag = 0.0;
+
+        while (currentState != GameState.EXIT) {
+            double current = System.currentTimeMillis();
+            double elapsed = current - lastTime;
+            lastTime = current;
+            lag += elapsed;
+            switch (currentState) {
+                case RUNNING -> {
+                    while (lag >= MS_PER_UPDATE) {
+                        canvas.updateStep();
+                        canvas.repaint();
+                        lag -= MS_PER_UPDATE;
+                    }
+                }
+                case PAUSED -> {
+                }
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
-import shapes.*;
 import shapes.Shape;
+import shapes.SquareShape;
+import shapes.UnitSquare;
 import utils.GraphicsUtils;
 
 import java.awt.*;
@@ -24,7 +25,7 @@ public class TetrisMainCanvas extends Canvas {
         xPos = 10;
         yPos = 10;
         shapes = new ArrayList<>();
-        shapes.add(new SquareShape((canvasSquareWidth / 2) - 1, canvasSquareHeight-1));
+        shapes.add(new SquareShape((canvasSquareWidth / 2) - 1, canvasSquareHeight - 1));
 //        shapes.add(new LineShape(0, 2));
 //        shapes.add(new TShape(0, 3));
 //        shapes.add(new LShape(0, 4));
@@ -34,9 +35,12 @@ public class TetrisMainCanvas extends Canvas {
 
     /**
      * Updates the entire canvas
+     *
+     * @param timeMs
      */
-    public void update() {
+    public void updateStep() {
         // Move active square down by 1
+        System.out.println("Update called");
         Shape activeShape = shapes.get(0);
         for (UnitSquare square : activeShape.getSquares()) {
             square.decCanvasY();
