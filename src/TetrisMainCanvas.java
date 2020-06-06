@@ -1,14 +1,18 @@
-import shapes.*;
-import shapes.Shape;
+import models.shapes.Shape;
+import models.shapes.*;
 import utils.GraphicsUtils;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
 public class TetrisMainCanvas extends Canvas {
+    boolean drawPauseButton = false;
+
     int canvasSquareWidth = 10;     // 10 squares wide
     int canvasSquareHeight = 20;    // 20 squares high
     int uLength = 30;               // Length of each unit square
@@ -22,7 +26,7 @@ public class TetrisMainCanvas extends Canvas {
     int width = xPosMax - xPos;
     int height = yPosMax - yPos;
 
-    ArrayList<shapes.Shape> shapes;
+    ArrayList<models.shapes.Shape> shapes;
     Shape activeShape;
     Shape nextShape;
 
@@ -32,9 +36,24 @@ public class TetrisMainCanvas extends Canvas {
         xPos = 10;
         yPos = 10;
         shapes = new ArrayList<>();
-        activeShape = pickNextShape();
+//        activeShape = pickNextShape();
+        activeShape = new JShape(centerX, canvasSquareHeight-1);
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                super.mouseEntered(e);
+                drawPauseButton = true;
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                drawPauseButton = false;
+            }
+        });
     }
 
     /**
@@ -67,7 +86,7 @@ public class TetrisMainCanvas extends Canvas {
      * Spawns new shape
      */
     private Shape pickNextShape() {
-        int nextShapeId = ThreadLocalRandom.current().nextInt(0, 4);
+        int nextShapeId = ThreadLocalRandom.current().nextInt(0, 5);
         switch (nextShapeId) {
             case 0 -> {
                 return new SquareShape(centerX, canvasSquareHeight - 1);
@@ -81,9 +100,10 @@ public class TetrisMainCanvas extends Canvas {
             case 3 -> {
                 return new LShape(centerX, canvasSquareHeight - 1);
             }
-            default -> {
-                throw new IndexOutOfBoundsException("Shape not found");
+            case 4 -> {
+                return new JShape(centerX, canvasSquareHeight - 1);
             }
+            default -> throw new IndexOutOfBoundsException("Shape not found");
         }
     }
 
@@ -106,6 +126,12 @@ public class TetrisMainCanvas extends Canvas {
         for (Shape shape : shapes) {
             drawShape(shape, g);
         }
+
+        if (drawPauseButton) {
+            System.out.println("Drawing pause button");
+        } else {
+            System.out.println("Not drawing pause button");
+        }
     }
 
     private void drawShape(Shape shape, Graphics g) {
@@ -117,8 +143,8 @@ public class TetrisMainCanvas extends Canvas {
     /**
      * Draws a unit square
      *
-     * @param square
-     * @param g
+     * @param square Square to draw
+     * @param g Graphics instance
      */
     private void drawUnit(UnitSquare square, Graphics g) {
         if (square.getCanvasX() > canvasSquareWidth ||

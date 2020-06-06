@@ -1,4 +1,4 @@
-package shapes;
+package models.shapes;
 
 import java.awt.*;
 import java.util.ArrayList;
