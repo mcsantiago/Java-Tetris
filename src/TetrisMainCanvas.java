@@ -3,8 +3,6 @@ import models.shapes.*;
 import utils.GraphicsUtils;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -38,20 +36,6 @@ public class TetrisMainCanvas extends Canvas {
         nextShape = pickNextShape();
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                super.mouseEntered(e);
-                drawPauseButton = true;
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-                drawPauseButton = false;
-            }
-        });
     }
 
     /**
@@ -61,6 +45,10 @@ public class TetrisMainCanvas extends Canvas {
         // Move active square down by 1
         activeShape.decYPosition();
 
+        Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
+
+        drawPauseButton = isWithinCanvas(currentMousePos.x - this.getLocationOnScreen().x, currentMousePos.y - this.getLocationOnScreen().y);
+
         if (isCollided(activeShape)) {
             System.out.println("Collision detected");
             if (!activeShape.isCollidedWithFloor()) {
@@ -69,6 +57,11 @@ public class TetrisMainCanvas extends Canvas {
             shapes.add(activeShape);
             activeShape = pickNextShape();
         }
+    }
+
+    private boolean isWithinCanvas(double x, double y) {
+        System.out.println("isWithinCanvas: x " + x + " y " + y + " xPos " + xPos + " yPos " + yPos);
+        return (x >= xPos && x <= xPosMax && y >= yPos && y <= yPosMax);
     }
 
     private boolean isCollided(Shape activeShape) {
@@ -135,6 +128,7 @@ public class TetrisMainCanvas extends Canvas {
         } else {
             System.out.println("Not drawing pause button");
         }
+
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
     }
 
