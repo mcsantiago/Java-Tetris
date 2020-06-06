@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -19,8 +18,8 @@ public class TetrisMainCanvas extends Canvas {
 
     int xPos;       // top-left of the main canvas
     int yPos;       // top-right of the main canvas
-    int xPosMax;    // bottom-left of the main canvas
-    int yPosMax;    // bottom-right of the main canvas
+    int xPosMax = xPos + (canvasSquareWidth * uLength);    // bottom-left of the main canvas
+    int yPosMax = yPos + (canvasSquareHeight * uLength);    // bottom-right of the main canvas
     int centerX = (canvasSquareWidth / 2) - 1;
 
     int width = xPosMax - xPos;
@@ -30,14 +29,13 @@ public class TetrisMainCanvas extends Canvas {
     Shape activeShape;
     Shape nextShape;
 
-    Random rng = new Random();
-
     public TetrisMainCanvas() {
         xPos = 10;
         yPos = 10;
         shapes = new ArrayList<>();
 //        activeShape = pickNextShape();
-        activeShape = new JShape(centerX, canvasSquareHeight-1);
+        activeShape = new SShape(centerX, canvasSquareHeight-1);
+        nextShape = pickNextShape();
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
 
@@ -86,22 +84,28 @@ public class TetrisMainCanvas extends Canvas {
      * Spawns new shape
      */
     private Shape pickNextShape() {
-        int nextShapeId = ThreadLocalRandom.current().nextInt(0, 5);
+        int nextShapeId = ThreadLocalRandom.current().nextInt(0, 7);
         switch (nextShapeId) {
             case 0 -> {
-                return new SquareShape(centerX, canvasSquareHeight - 1);
+                return new OShape(centerX, canvasSquareHeight - 1);
             }
             case 1 -> {
                 return new TShape(centerX, canvasSquareHeight - 1);
             }
             case 2 -> {
-                return new LineShape(centerX, canvasSquareHeight - 1);
+                return new IShape(centerX, canvasSquareHeight - 1);
             }
             case 3 -> {
                 return new LShape(centerX, canvasSquareHeight - 1);
             }
             case 4 -> {
                 return new JShape(centerX, canvasSquareHeight - 1);
+            }
+            case 5 -> {
+                return new SShape(centerX, canvasSquareHeight - 1);
+            }
+            case 6 -> {
+                return new ZShape(centerX, canvasSquareHeight - 1);
             }
             default -> throw new IndexOutOfBoundsException("Shape not found");
         }
@@ -112,14 +116,13 @@ public class TetrisMainCanvas extends Canvas {
      */
     public void paint(Graphics g) {
 //        System.out.println("Paint call");
-        GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
 
         // Draw the debug grid lines
-        for (int x = 0; x < canvasSquareWidth; x++) {
-            for (int y = 0; y < canvasSquareHeight; y++) {
-                drawUnit(new UnitSquare(x, y, Color.WHITE), g);
-            }
-        }
+//        for (int x = 0; x < canvasSquareWidth; x++) {
+//            for (int y = 0; y < canvasSquareHeight; y++) {
+//                drawUnit(new UnitSquare(x, y, Color.WHITE), g);
+//            }
+//        }
 
         drawShape(activeShape, g);
 
@@ -132,6 +135,7 @@ public class TetrisMainCanvas extends Canvas {
         } else {
             System.out.println("Not drawing pause button");
         }
+        GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
     }
 
     private void drawShape(Shape shape, Graphics g) {
@@ -155,7 +159,7 @@ public class TetrisMainCanvas extends Canvas {
         }
 
         int x = xPos + (square.getCanvasX() * uLength);
-        int maxY = (canvasSquareHeight * uLength);
+        int maxY = (canvasSquareHeight * uLength) - yPos;
         int y = maxY - (yPos + (square.getCanvasY() * uLength)); // Invert the y axis
 
         g.setColor(square.getColor());
@@ -165,10 +169,10 @@ public class TetrisMainCanvas extends Canvas {
         g2.setStroke(new BasicStroke(2));
         g.setColor(Color.black);
 
-        g.drawLine(x, y, x + 30, y);
-        g.drawLine(x + 30, y, x + 30, y + 30);
-        g.drawLine(x + 30, y + 30, x, y + 30);
-        g.drawLine(x, y + 30, x, y);
+        g.drawLine(x, y, x + uLength, y);
+        g.drawLine(x + uLength, y, x + uLength, y + uLength);
+        g.drawLine(x + uLength, y + uLength, x, y + uLength);
+        g.drawLine(x, y + uLength, x, y);
     }
 }
 

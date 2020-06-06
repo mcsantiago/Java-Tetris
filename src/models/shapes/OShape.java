@@ -2,8 +2,8 @@ package models.shapes;
 
 import java.awt.*;
 
-public class SquareShape extends Shape {
-  public SquareShape(int xPos, int yPos) {
+public class OShape extends Shape {
+  public OShape(int xPos, int yPos) {
     super(xPos, yPos);
     squares.add(new UnitSquare(xPos, yPos, getColor()));
     squares.add(new UnitSquare(xPos + 1, yPos, getColor()));

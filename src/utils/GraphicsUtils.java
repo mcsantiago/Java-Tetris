@@ -18,9 +18,9 @@ public class GraphicsUtils {
 
         g.setColor(Color.black);
         g2.setStroke(new BasicStroke(stroke));
-        g.drawLine(x, y, x + width, y);
-        g.drawLine(x + width, y, x + width, y + height);
-        g.drawLine(x + width, y + height, x, y + height);
-        g.drawLine(x, y + height, x, y);
+        g.drawLine(x, y, x + width, y);                             // North line
+        g.drawLine(x + width, y, x + width, y + height);    // East Line
+        g.drawLine(x + width, y + height, x, y + height);   // South Line
+        g.drawLine(x, y + height, x, y);                            // West line
     }
 }
