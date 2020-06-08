@@ -13,6 +13,6 @@ public class TShape extends Shape {
 
   @Override
   public Color getColor() {
-    return Color.red;
+    return Color.orange;
   }
 }

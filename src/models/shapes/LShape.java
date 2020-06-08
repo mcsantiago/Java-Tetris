@@ -13,6 +13,6 @@ public class LShape extends Shape {
 
   @Override
   public Color getColor() {
-    return Color.green;
+    return Color.magenta;
   }
 }

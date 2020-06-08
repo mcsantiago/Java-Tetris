@@ -23,17 +23,37 @@ public class TetrisMainCanvas extends Canvas {
     int width = xPosMax - xPos;
     int height = yPosMax - yPos;
 
+    int level = 1;
+    int lines = 0;
+    int score = 0;
+
     ArrayList<models.shapes.Shape> shapes;
     Shape activeShape;
     Shape nextShape;
+    Button pauseButton;
 
     public TetrisMainCanvas() {
         xPos = 10;
         yPos = 10;
+        pauseButton = new Button("PAUSE");
         shapes = new ArrayList<>();
-//        activeShape = pickNextShape();
-        activeShape = new SShape(centerX, canvasSquareHeight-1);
+
+        // The following section is for demo only
+        activeShape = new IShape(centerX, canvasSquareHeight - 1);
         nextShape = pickNextShape();
+        shapes.add(new JShape(centerX, 2));
+        shapes.add(new OShape(centerX-3, 1));
+        shapes.add(new ZShape(centerX+3, 1));
+        shapes.add(new SShape(centerX+3, 3));
+        shapes.add(new LShape(centerX+3, 6));
+        shapes.add(new TShape(4, 3));
+
+
+        // TODO: Enable the commented out section for playable game
+//        activeShape = pickNextShape();
+//        nextShape = pickNextShape();
+//        pauseButton.setBounds(xPos + (width / 2), yPos + (height / 2), width, height);
+//        add(pauseButton);
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
     }
@@ -42,25 +62,28 @@ public class TetrisMainCanvas extends Canvas {
      * Updates the entire canvas
      */
     public void updateStep() {
-        // Move active square down by 1
-        activeShape.decYPosition();
-
+//        // Move active square down by 1
+//        activeShape.decYPosition();
+//
         Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
 
-        drawPauseButton = isWithinCanvas(currentMousePos.x - this.getLocationOnScreen().x, currentMousePos.y - this.getLocationOnScreen().y);
+        drawPauseButton = isWithinCanvas(
+                currentMousePos.x - this.getLocationOnScreen().x,
+                currentMousePos.y - this.getLocationOnScreen().y);
 
-        if (isCollided(activeShape)) {
-            System.out.println("Collision detected");
-            if (!activeShape.isCollidedWithFloor()) {
-                activeShape.incYPosition(); // Corrected position
-            }
-            shapes.add(activeShape);
-            activeShape = pickNextShape();
-        }
+//
+//        if (isCollided(activeShape)) {
+//            System.out.println("Collision detected");
+//            if (!activeShape.isCollidedWithFloor()) {
+//                activeShape.incYPosition(); // Corrected position
+//            }
+//            shapes.add(activeShape);
+//            activeShape = nextShape;
+//            nextShape = pickNextShape();
+//        }
     }
 
     private boolean isWithinCanvas(double x, double y) {
-        System.out.println("isWithinCanvas: x " + x + " y " + y + " xPos " + xPos + " yPos " + yPos);
         return (x >= xPos && x <= xPosMax && y >= yPos && y <= yPosMax);
     }
 
@@ -80,25 +103,25 @@ public class TetrisMainCanvas extends Canvas {
         int nextShapeId = ThreadLocalRandom.current().nextInt(0, 7);
         switch (nextShapeId) {
             case 0 -> {
-                return new OShape(centerX, canvasSquareHeight - 1);
+                return new OShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 1 -> {
-                return new TShape(centerX, canvasSquareHeight - 1);
+                return new TShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 2 -> {
-                return new IShape(centerX, canvasSquareHeight - 1);
+                return new IShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 3 -> {
-                return new LShape(centerX, canvasSquareHeight - 1);
+                return new LShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 4 -> {
-                return new JShape(centerX, canvasSquareHeight - 1);
+                return new JShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 5 -> {
-                return new SShape(centerX, canvasSquareHeight - 1);
+                return new SShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 6 -> {
-                return new ZShape(centerX, canvasSquareHeight - 1);
+                return new ZShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             default -> throw new IndexOutOfBoundsException("Shape not found");
         }
@@ -109,6 +132,8 @@ public class TetrisMainCanvas extends Canvas {
      */
     public void paint(Graphics g) {
 //        System.out.println("Paint call");
+        Dimension d = getSize();
+        Graphics2D g2 = (Graphics2D) g;
 
         // Draw the debug grid lines
 //        for (int x = 0; x < canvasSquareWidth; x++) {
@@ -123,13 +148,42 @@ public class TetrisMainCanvas extends Canvas {
             drawShape(shape, g);
         }
 
+        // Draw preview screen
+        GraphicsUtils.drawBorder(xPosMax + 50, yPos, uLength * 5, uLength * 5, 5, g);
+        drawShape(nextShape, g);
+
         if (drawPauseButton) {
-            System.out.println("Drawing pause button");
-        } else {
-            System.out.println("Not drawing pause button");
+            drawButton( "PAUSE",
+                    xPos + (width / 2),
+                    yPos + (height / 2),
+                    Color.BLUE, g);
         }
 
+        // Draw score labels
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.PLAIN, 18));
+        g2.drawString("Level: " + level, xPosMax + 50, yPos + (height / 2) - 40);
+        g2.drawString("Lines: " + lines, xPosMax + 50, yPos + (height / 2));
+        g2.drawString("Score: " + score, xPosMax + 50, yPos + (height / 2) + 40);
+
+        drawButton( "QUIT",
+                xPosMax + 100,
+                yPos + (height - 20),
+                Color.GRAY, g);
+
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
+    }
+
+    private void drawButton(String label, int x, int y, Color color, Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        g.setColor(color);
+        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g2.drawString(label, x - (label.length() * 10), y);
+        ((Graphics2D) g).setStroke(new BasicStroke(1));
+        g.drawLine(x-(label.length() * 15), y - 24, x+(label.length() * 10), y-24);
+        g.drawLine(x+(label.length() * 10), y - 24, x+(label.length() * 10), y+24);
+        g.drawLine(x+(label.length() * 10), y + 24, x-(label.length() * 15), y+24);
+        g.drawLine(x-(label.length() * 15), y + 24, x-(label.length() * 15), y-24);
     }
 
     private void drawShape(Shape shape, Graphics g) {
@@ -145,13 +199,6 @@ public class TetrisMainCanvas extends Canvas {
      * @param g Graphics instance
      */
     private void drawUnit(UnitSquare square, Graphics g) {
-        if (square.getCanvasX() > canvasSquareWidth ||
-                square.getCanvasX() < 0 ||
-                square.getCanvasY() > canvasSquareHeight ||
-                square.getCanvasY() < 0) {
-            throw new IndexOutOfBoundsException("Square position out of bounds of Canvas: (" + square.getCanvasX() + ", " + square.getCanvasY() + ")");
-        }
-
         int x = xPos + (square.getCanvasX() * uLength);
         int maxY = (canvasSquareHeight * uLength) - yPos;
         int y = maxY - (yPos + (square.getCanvasY() * uLength)); // Invert the y axis
@@ -169,5 +216,3 @@ public class TetrisMainCanvas extends Canvas {
         g.drawLine(x, y + uLength, x, y);
     }
 }
-
-

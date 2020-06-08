@@ -32,7 +32,8 @@ public class TetrisWindow extends Frame {
                 }
             }
         });
-        setLayout(new GridLayout(1, 2));
+        setTitle("Assignment 1 - Q2");
+        setBackground(Color.white);
         setSize(600, 800);
         add(canvas);
         setVisible(true);
