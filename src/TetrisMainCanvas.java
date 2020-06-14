@@ -97,6 +97,7 @@ public class TetrisMainCanvas extends Canvas {
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
                 Point p = e.getLocationOnScreen();
+                // TODO: Maybe hover over logic can move here?
             }
         });
     }
@@ -197,6 +198,20 @@ public class TetrisMainCanvas extends Canvas {
      */
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+
+        // Draw score labels
+//        System.out.println("Drawing labels");
+        g.setColor(Color.BLACK);
+//        System.out.println("\tSet color");
+        g.setFont(defaultFont);
+//        System.out.println("\tSet font");
+        g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
+//        System.out.println("\tLevel: " + level);
+        g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
+//        System.out.println("\tLines: " + lines);
+        g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
+//        System.out.println("\tScore: " + score);
+
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
         System.out.println("widthRatio: " + widthRatio + " heightRatio: " + heightRatio);
         System.out.println("xPosMax: " + canvasXMax + " yPosMax: " + canvasYMax + " xPos: " + xPos + " yPos " + yPos + " uLength: " + uLength + " width: " + width + " height: " + height);
@@ -222,20 +237,7 @@ public class TetrisMainCanvas extends Canvas {
             pauseButton.draw(xPos + (width / 2), yPos + (height / 2), g);
         }
 
-        // Draw score labels
-//        System.out.println("Drawing labels");
-        g.setColor(Color.BLACK);
-//        System.out.println("\tSet color");
-        g.setFont(defaultFont);
-//        System.out.println("\tSet font");
-        g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
-//        System.out.println("\tLevel: " + level);
-        g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
-//        System.out.println("\tLines: " + lines);
-        g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
-//        System.out.println("\tScore: " + score);
 
-//        System.out.println("Drawing buttons");
         quitButton.draw(canvasXMax + 100, yPos + (height - 20), g);
     }
 
