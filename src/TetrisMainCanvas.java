@@ -253,8 +253,7 @@ public class TetrisMainCanvas extends Canvas {
      */
     private void drawUnit(UnitSquare square, Graphics g) {
         int x = xPos + (square.getCanvasX() * uLength);
-        int maxY = (canvasSquareHeight * uLength) - yPos;
-        int y = maxY - (yPos + (square.getCanvasY() * uLength)); // Invert the y axis
+        int y = yPos + (square.getCanvasY() * uLength);
 
         g.setColor(square.getColor());
         g.fillRect(x, y, uLength, uLength);

@@ -9,7 +9,7 @@ public class UnitSquare {
 
   public UnitSquare(int canvasX, int canvasY, Color color) {
     this.canvasX = canvasX;
-    this.canvasY = canvasY;
+    this.canvasY = 19 - canvasY; // TODO: A bit of a hack to invert y axis.. should refactor
     this.color = color;
   }
 
