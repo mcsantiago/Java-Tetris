@@ -1,3 +1,5 @@
+import models.buttons.PauseButton;
+import models.buttons.QuitButton;
 import models.shapes.Shape;
 import models.shapes.*;
 import utils.GraphicsUtils;
@@ -5,6 +7,8 @@ import utils.GraphicsUtils;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -32,6 +36,12 @@ public class TetrisMainCanvas extends Canvas {
     int lines = 0;
     int score = 0;
 
+    Font buttonFont = new Font("Arial", Font.BOLD, 23);
+    Font defaultFont = new Font("Arial", Font.PLAIN, 16);
+
+    PauseButton pauseButton = new PauseButton();
+    QuitButton quitButton = new QuitButton();
+
     ArrayList<models.shapes.Shape> shapes;
     Shape activeShape;
     Shape nextShape;
@@ -49,6 +59,7 @@ public class TetrisMainCanvas extends Canvas {
         height = canvasYMax - yPos;
 
         shapes = new ArrayList<>();
+
 
         // The following section is for demo only
         activeShape = new IShape(centerX, canvasSquareHeight - 1);
@@ -73,6 +84,26 @@ public class TetrisMainCanvas extends Canvas {
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
                 recalculateSize(recalculateDimensions(getSize()));
+            }
+        });
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
+                Point p = e.getLocationOnScreen();
+                double relativeMouseX = currentMousePos.x - p.x;
+                double relativeMouseY = currentMousePos.y - p.y;
+                System.out.println(p);
+                if (quitButton.isWithinButton(relativeMouseX, relativeMouseY)) {
+                    System.exit(0);
+                }
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                super.mouseMoved(e);
+                Point p = e.getLocationOnScreen();
             }
         });
     }
@@ -103,7 +134,7 @@ public class TetrisMainCanvas extends Canvas {
     }
 
     void recalculateSize(Dimension boundary) {
-        System.out.println("Recalculating those dimensions");
+//        System.out.println("Recalculating those dimensions");
         heightRatio = (boundary.height / 800.0f) + 0.0275f;
         widthRatio = boundary.width / 600.0f;
 
@@ -123,10 +154,12 @@ public class TetrisMainCanvas extends Canvas {
 //
         Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
 
-        drawPauseButton = isWithinCanvas(
-                currentMousePos.x - this.getLocationOnScreen().x,
-                currentMousePos.y - this.getLocationOnScreen().y);
+        double relativeMouseX = currentMousePos.x - this.getLocationOnScreen().x;
+        double relativeMouseY = currentMousePos.y - this.getLocationOnScreen().y;
 
+        boolean isPauseButtonVisible = isWithinCanvas(relativeMouseX, relativeMouseY);
+
+        pauseButton.setVisible(isPauseButtonVisible);
 
 //        if (isCollided(activeShape)) {
 //            System.out.println("Collision detected");
@@ -189,8 +222,8 @@ public class TetrisMainCanvas extends Canvas {
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
-        System.out.println("widthRatio: " + widthRatio + " heightRatio: " + heightRatio);
-        System.out.println("xPosMax: " + canvasXMax + " yPosMax: " + canvasYMax + " xPos: " + xPos + " yPos " + yPos + " uLength: " + uLength + " width: " + width + " height: " + height);
+//        System.out.println("widthRatio: " + widthRatio + " heightRatio: " + heightRatio);
+//        System.out.println("xPosMax: " + canvasXMax + " yPosMax: " + canvasYMax + " xPos: " + xPos + " yPos " + yPos + " uLength: " + uLength + " width: " + width + " height: " + height);
 
         // Draw the debug grid lines
 //        for (int x = 0; x < canvasSquareWidth; x++) {
@@ -209,30 +242,32 @@ public class TetrisMainCanvas extends Canvas {
         GraphicsUtils.drawBorder(canvasXMax + 50, yPos, uLength * 5, uLength * 5, 5, g);
         drawShape(nextShape, g);
 
-        if (drawPauseButton) {
-            drawButton( "PAUSE",
-                    xPos + (width / 2),
-                    yPos + (height / 2),
-                    Color.BLUE, g);
+        if (pauseButton.isVisible()) {
+            pauseButton.draw(xPos + (width / 2), yPos + (height / 2), g);
         }
 
         // Draw score labels
+//        System.out.println("Drawing labels");
         g.setColor(Color.BLACK);
-        g.setFont(new Font("Arial", Font.PLAIN, 18));
+//        System.out.println("\tSet color");
+        g.setFont(defaultFont);
+//        System.out.println("\tSet font");
         g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
+//        System.out.println("\tLevel: " + level);
         g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
+//        System.out.println("\tLines: " + lines);
         g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
+//        System.out.println("\tScore: " + score);
 
-        drawButton( "QUIT",
-                canvasXMax + 100,
-                yPos + (height - 20),
-                Color.GRAY, g);
+//        System.out.println("Drawing buttons");
+        quitButton.draw(canvasXMax + 100, yPos + (height - 20), g);
     }
 
-    private void drawButton(String label, int x, int y, Color color, Graphics g) {
+    // TODO: This function is to be deprecated in favor of Button classes
+    void drawButton(String label, int x, int y, Color color, Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         g.setColor(color);
-        g.setFont(new Font("Arial", Font.BOLD, 24));
+        g.setFont(buttonFont);
         g2.drawString(label, x - (label.length() * 10), y);
         ((Graphics2D) g).setStroke(new BasicStroke(1));
         g.drawLine(x-(label.length() * 15), y - 24, x+(label.length() * 10), y-24);
@@ -271,3 +306,4 @@ public class TetrisMainCanvas extends Canvas {
         g.drawLine(x, y + uLength, x, y);
     }
 }
+
