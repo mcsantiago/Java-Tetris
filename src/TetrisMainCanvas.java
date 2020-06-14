@@ -36,7 +36,6 @@ public class TetrisMainCanvas extends Canvas {
     int lines = 0;
     int score = 0;
 
-    Font buttonFont = new Font("Arial", Font.BOLD, 23);
     Font defaultFont = new Font("Arial", Font.PLAIN, 16);
 
     PauseButton pauseButton = new PauseButton();
@@ -163,7 +162,7 @@ public class TetrisMainCanvas extends Canvas {
     }
 
     /**
-     * Spawns new shape
+     * Spawns new shape at the preview screen
      */
     private Shape pickNextShape() {
         int nextShapeId = ThreadLocalRandom.current().nextInt(0, 7);
@@ -219,7 +218,7 @@ public class TetrisMainCanvas extends Canvas {
         GraphicsUtils.drawBorder(canvasXMax + 50, yPos, uLength * 5, uLength * 5, 5, g);
         drawShape(nextShape, g);
 
-        if (pauseButton.isVisible()) {
+        if (pauseButton.isVisible()) { // Maybe we can refactor this to be built inside draw?
             pauseButton.draw(xPos + (width / 2), yPos + (height / 2), g);
         }
 
