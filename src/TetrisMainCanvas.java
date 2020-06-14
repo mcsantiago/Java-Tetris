@@ -91,11 +91,9 @@ public class TetrisMainCanvas extends Canvas {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
-                Point p = e.getLocationOnScreen();
-                double relativeMouseX = currentMousePos.x - p.x;
-                double relativeMouseY = currentMousePos.y - p.y;
+                Point p = e.getPoint();
                 System.out.println(p);
-                if (quitButton.isWithinButton(relativeMouseX, relativeMouseY)) {
+                if (quitButton.isWithinButton(p.x, p.y)) {
                     System.exit(0);
                 }
             }

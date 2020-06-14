@@ -7,36 +7,10 @@ import java.awt.*;
 public abstract class Button implements IClickable {
   int x;
   int y;
-  int maxX;
-  int maxY;
   String label;
   boolean isVisible;
   Color color;
   Font buttonFont = new Font("Arial", Font.BOLD, 23);
-
-  public int getX() {
-    return x;
-  }
-
-  public int getY() {
-    return y;
-  }
-
-  public int getMaxX() {
-    return maxX;
-  }
-
-  public int getMaxY() {
-    return maxY;
-  }
-
-  public void setX(int x) {
-    this.x = x;
-  }
-
-  public void setY(int y) {
-    this.y = y;
-  }
 
   public boolean isVisible() {
     return isVisible;
@@ -52,6 +26,9 @@ public abstract class Button implements IClickable {
   }
 
   public void draw(int x, int y, Graphics g) {
+    this.x = x; // TODO: This should not be here.. but it works for now
+    this.y = y;
+
     Graphics2D g2 = (Graphics2D) g;
     g.setColor(color);
     g.setFont(buttonFont);
