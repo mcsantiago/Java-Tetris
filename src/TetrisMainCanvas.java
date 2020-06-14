@@ -31,7 +31,6 @@ public class TetrisMainCanvas extends Canvas {
     int level = 1;
     int lines = 0;
     int score = 0;
-    float initialAspectRatio = 0.75f; // 600 / 800
 
     ArrayList<models.shapes.Shape> shapes;
     Shape activeShape;
@@ -79,19 +78,17 @@ public class TetrisMainCanvas extends Canvas {
     }
 
     Dimension recalculateDimensions(Dimension newSize) {
-        int original_width = d.width;
-        int original_height = d.height;
         int bound_width = newSize.width;
         int bound_height = newSize.height;
-        int new_width = original_width;
-        int new_height = original_height;
+        int new_width = d.width;
+        int new_height = d.height;
 
         // first check if we need to scale width
-        if (original_width > bound_width) {
+        if (d.width > bound_width) {
             //scale width to fit
             new_width = bound_width;
             //scale height to maintain aspect ratio
-            new_height = (new_width * original_height) / original_width;
+            new_height = (new_width * d.height) / d.width;
         }
 
         // then check if we need to scale even with the new height
@@ -99,7 +96,7 @@ public class TetrisMainCanvas extends Canvas {
             //scale height to fit instead
             new_height = bound_height;
             //scale width to maintain aspect ratio
-            new_width = (new_height * original_width) / original_height;
+            new_width = (new_height * d.width) / d.height;
         }
 
         return new Dimension(new_width, new_height);
@@ -109,13 +106,12 @@ public class TetrisMainCanvas extends Canvas {
         System.out.println("Recalculating those dimensions");
         heightRatio = (boundary.height / 800.0f) + 0.0275f;
         widthRatio = boundary.width / 600.0f;
-//        float aspectRatio = (float)boundary.width / boundary.height;
 
-        uLength = Math.round(30 * widthRatio) + 1;               // Length of each unit square
         canvasXMax = Math.round((xPos + (canvasSquareWidth * uLength)) * widthRatio);    // bottom-left of the main canvas
         canvasYMax = Math.round((yPos + (canvasSquareHeight * uLength)) * heightRatio);    // bottom-right of the main canvas
         width = canvasXMax - xPos;
         height = canvasYMax - yPos;
+        uLength = Math.round((float) height/ canvasSquareHeight);               // Length of each unit square
     }
 
     /**
@@ -131,7 +127,7 @@ public class TetrisMainCanvas extends Canvas {
                 currentMousePos.x - this.getLocationOnScreen().x,
                 currentMousePos.y - this.getLocationOnScreen().y);
 
-//
+
 //        if (isCollided(activeShape)) {
 //            System.out.println("Collision detected");
 //            if (!activeShape.isCollidedWithFloor()) {
@@ -169,7 +165,7 @@ public class TetrisMainCanvas extends Canvas {
                 return new TShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 2 -> {
-                return new IShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
+                return new IShape(canvasSquareWidth + 2, canvasSquareHeight - 3);
             }
             case 3 -> {
                 return new LShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
@@ -178,7 +174,7 @@ public class TetrisMainCanvas extends Canvas {
                 return new JShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
             case 5 -> {
-                return new SShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
+                return new SShape(canvasSquareWidth + 4, canvasSquareHeight - 3);
             }
             case 6 -> {
                 return new ZShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
@@ -191,7 +187,6 @@ public class TetrisMainCanvas extends Canvas {
      * Draws the entire canvas
      */
     public void paint(Graphics g) {
-//        System.out.println("Paint call");
         Graphics2D g2 = (Graphics2D) g;
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
         System.out.println("widthRatio: " + widthRatio + " heightRatio: " + heightRatio);
