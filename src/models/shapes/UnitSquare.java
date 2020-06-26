@@ -25,18 +25,11 @@ public class UnitSquare {
     return color;
   }
 
-  /** Decrements CanvasX by 1 */
-  public void incCanvasX() {
-    this.canvasX++;
+  public void incCanvasXBy(int i) {
+    this.canvasX += i;
   }
 
-  /** Increments CanvasY by 1 */
-  public void incCanvasY() {
-    this.canvasY++;
-  }
-
-  /** Decrements CanvasY by 1 */
-  public void decCanvasY() {
-    this.canvasY--;
+  public void incCanvasYBy(int i) {
+    this.canvasY += i;
   }
 }

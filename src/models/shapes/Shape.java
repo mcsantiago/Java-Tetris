@@ -15,10 +15,25 @@ public abstract class Shape {
 
   public abstract Color getColor();
 
+  public void setxPos(int xPos) {
+    int dx = this.xPos - xPos;
+    this.xPos += dx;
+    for (UnitSquare square : squares) {
+      square.incCanvasXBy(dx);
+    }
+  }
+
   public void decYPosition() {
     yPos--;
     for (UnitSquare square : squares) {
-      square.decCanvasY();
+      square.incCanvasYBy(-1);
+    }
+  }
+
+  public void incYPosition() {
+    yPos++;
+    for (UnitSquare square : squares) {
+      square.incCanvasYBy(1);
     }
   }
 
@@ -40,17 +55,11 @@ public abstract class Shape {
 
   public boolean isCollidedWithFloor() {
     for (UnitSquare square : squares) {
-      if (square.getCanvasY() <= 0) {
+      if (square.getCanvasY() >= 19) {
+        System.out.println(this.getClass() + " collided with floor");
         return true;
       }
     }
     return false;
-  }
-
-  public void incYPosition() {
-    yPos++;
-    for (UnitSquare square : squares) {
-      square.incCanvasY();
-    }
   }
 }

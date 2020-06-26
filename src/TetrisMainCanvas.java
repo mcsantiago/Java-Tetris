@@ -61,19 +61,20 @@ public class TetrisMainCanvas extends Canvas {
 
 
         // The following section is for demo only
-        activeShape = new IShape(centerX, canvasSquareHeight - 1);
-        nextShape = pickNextShape();
-        shapes.add(new JShape(centerX, 2));
-        shapes.add(new OShape(centerX-3, 1));
-        shapes.add(new ZShape(centerX+3, 1));
-        shapes.add(new SShape(centerX+3, 3));
-        shapes.add(new LShape(centerX+3, 6));
-        shapes.add(new TShape(4, 3));
+//        activeShape = new IShape(centerX, canvasSquareHeight - 1);
+//        nextShape = pickNextShape();
+//        shapes.add(new JShape(centerX, 2));
+//        shapes.add(new OShape(centerX-3, 1));
+//        shapes.add(new ZShape(centerX+3, 1));
+//        shapes.add(new SShape(centerX+3, 3));
+//        shapes.add(new LShape(centerX+3, 6));
+//        shapes.add(new TShape(4, 3));
 
 
         // TODO: Enable the commented out section for playable game
-//        activeShape = pickNextShape();
-//        nextShape = pickNextShape();
+        activeShape = pickNextShape();
+        activeShape.setxPos(centerX);
+        nextShape = pickNextShape();
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
         addComponentListener(new ComponentAdapter() {
@@ -96,8 +97,9 @@ public class TetrisMainCanvas extends Canvas {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e);
-                Point p = e.getLocationOnScreen();
-                // TODO: Maybe hover over logic can move here?
+                Point p = e.getPoint();
+                boolean isPauseButtonVisible = isWithinCanvas(p.x, p.y);
+                pauseButton.setVisible(isPauseButtonVisible);
             }
         });
     }
@@ -126,27 +128,25 @@ public class TetrisMainCanvas extends Canvas {
      * Updates the entire canvas
      */
     public void updateStep() {
+        System.out.println("Update Step");
+
+        // Update state
+        if (!pauseButton.isVisible()) { // Play state
 //        // Move active square down by 1
-//        activeShape.decYPosition();
-//
-        Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
+          activeShape.incYPosition();
 
-        double relativeMouseX = currentMousePos.x - this.getLocationOnScreen().x;
-        double relativeMouseY = currentMousePos.y - this.getLocationOnScreen().y;
+          if (isCollided(activeShape)) {
+            System.out.println("Collision detected");
+            if (!activeShape.isCollidedWithFloor()) {
+              activeShape.decYPosition(); // Corrected position
+            }
+            shapes.add(activeShape);
+            activeShape = nextShape;
+            activeShape.setxPos(centerX);
+            nextShape = pickNextShape();
+          }
+        }
 
-        boolean isPauseButtonVisible = isWithinCanvas(relativeMouseX, relativeMouseY);
-
-        pauseButton.setVisible(isPauseButtonVisible);
-
-//        if (isCollided(activeShape)) {
-//            System.out.println("Collision detected");
-//            if (!activeShape.isCollidedWithFloor()) {
-//                activeShape.incYPosition(); // Corrected position
-//            }
-//            shapes.add(activeShape);
-//            activeShape = nextShape;
-//            nextShape = pickNextShape();
-//        }
     }
 
     private boolean isWithinCanvas(double x, double y) {
@@ -197,20 +197,21 @@ public class TetrisMainCanvas extends Canvas {
      * Draws the entire canvas
      */
     public void paint(Graphics g) {
+        System.out.println("Paint call");
         Graphics2D g2 = (Graphics2D) g;
 
         // Draw score labels
-//        System.out.println("Drawing labels");
-        g.setColor(Color.BLACK);
-//        System.out.println("\tSet color");
-        g.setFont(defaultFont);
-//        System.out.println("\tSet font");
-        g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
-//        System.out.println("\tLevel: " + level);
-        g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
-//        System.out.println("\tLines: " + lines);
-        g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
-//        System.out.println("\tScore: " + score);
+////        System.out.println("Drawing labels");
+//        g.setColor(Color.BLACK);
+////        System.out.println("\tSet color");
+//        g.setFont(defaultFont);
+////        System.out.println("\tSet font");
+//        g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
+////        System.out.println("\tLevel: " + level);
+//        g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
+////        System.out.println("\tLines: " + lines);
+//        g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
+////        System.out.println("\tScore: " + score);
 
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
         System.out.println("widthRatio: " + widthRatio + " heightRatio: " + heightRatio);
