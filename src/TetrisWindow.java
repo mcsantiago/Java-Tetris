@@ -4,9 +4,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-enum GameState {RUNNING, PAUSED, EXIT}
+enum GameState {
+    RUNNING, PAUSED, EXIT
+}
 
 public class TetrisWindow extends Frame {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7765414404380680330L;
     private static final double MS_PER_UPDATE = 200;
     GameState currentState = GameState.RUNNING;
     TetrisMainCanvas canvas = new TetrisMainCanvas();
@@ -19,7 +25,6 @@ public class TetrisWindow extends Frame {
                 System.out.println("System exiting");
                 System.exit(0);
             }
-
 
         });
         addKeyListener(new KeyAdapter() {
@@ -52,7 +57,6 @@ public class TetrisWindow extends Frame {
         }
     }
 
-
     public void run() {
         init();
 
@@ -74,6 +78,8 @@ public class TetrisWindow extends Frame {
                 }
                 case PAUSED -> {
                 }
+                case EXIT -> throw new UnsupportedOperationException("Unimplemented case: " + currentState);
+                default -> throw new IllegalArgumentException("Unexpected value: " + currentState);
             }
         }
     }

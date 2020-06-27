@@ -12,21 +12,25 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 public class TetrisMainCanvas extends Canvas {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5028476911135615583L;
+
     Dimension d;
 
-    int canvasSquareWidth = 10;     // 10 squares wide
-    int canvasSquareHeight = 20;    // 20 squares high
+    int canvasSquareWidth = 10; // 10 squares wide
+    int canvasSquareHeight = 20; // 20 squares high
     float heightRatio;
     float widthRatio;
-    int uLength;               // Length of each unit square
+    int uLength; // Length of each unit square
     int prevULength;
 
-    int xPos;       // top-left of the main canvas
-    int yPos;       // top-right of the main canvas
-    int canvasXMax;    // bottom-left of the main canvas
-    int canvasYMax;    // bottom-right of the main canvas
+    int xPos; // top-left of the main canvas
+    int yPos; // top-right of the main canvas
+    int canvasXMax; // bottom-left of the main canvas
+    int canvasYMax; // bottom-right of the main canvas
     int centerX = (canvasSquareWidth / 2) - 1;
 
     int width;
@@ -51,30 +55,29 @@ public class TetrisMainCanvas extends Canvas {
         yPos = 10;
         heightRatio = (d.height / 800.0f) + 0.0275f;
         widthRatio = d.width / 600.0f;
-        prevULength = uLength = d.height / 30;               // Length of each unit square
-        canvasXMax = Math.round((xPos + (canvasSquareWidth * uLength)) * widthRatio);    // bottom-left of the main canvas
-        canvasYMax = Math.round((yPos + (canvasSquareHeight * uLength)) * heightRatio);    // bottom-right of the main canvas
+        prevULength = uLength = d.height / 30; // Length of each unit square
+        canvasXMax = Math.round((xPos + (canvasSquareWidth * uLength)) * widthRatio); // bottom-left of the main canvas
+        canvasYMax = Math.round((yPos + (canvasSquareHeight * uLength)) * heightRatio); // bottom-right of the main
+                                                                                        // canvas
         width = canvasXMax - xPos;
         height = canvasYMax - yPos;
 
         shapes = new ArrayList<>();
 
-
         // The following section is for demo only
-//        activeShape = new IShape(centerX, canvasSquareHeight - 1);
-//        nextShape = pickNextShape();
-//        shapes.add(new JShape(centerX, 2));
-//        shapes.add(new OShape(centerX-3, 1));
-//        shapes.add(new ZShape(centerX+3, 1));
-//        shapes.add(new SShape(centerX+3, 3));
-//        shapes.add(new LShape(centerX+3, 6));
-//        shapes.add(new TShape(4, 3));
-
+        activeShape = new IShape(centerX, canvasSquareHeight - 1);
+        // nextShape = pickNextShape();
+        // shapes.add(new JShape(centerX, 2));
+        // shapes.add(new OShape(centerX-3, 1));
+        // shapes.add(new ZShape(centerX+3, 1));
+        // shapes.add(new SShape(centerX+3, 3));
+        // shapes.add(new LShape(centerX+3, 6));
+        // shapes.add(new TShape(4, 3));
 
         // TODO: Enable the commented out section for playable game
-        activeShape = pickNextShape();
-        activeShape.setxPos(centerX);
-        nextShape = pickNextShape();
+        // activeShape = pickNextShape();
+        // activeShape.setxPos(centerX);
+        // nextShape = pickNextShape();
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
         addComponentListener(new ComponentAdapter() {
@@ -105,19 +108,19 @@ public class TetrisMainCanvas extends Canvas {
     }
 
     Dimension recalculateDimensions(Dimension newSize) {
-        int new_width = (newSize.height * d.width) / d.height; //scale width to maintain aspect ratio
+        int new_width = (newSize.height * d.width) / d.height; // scale width to maintain aspect ratio
         return new Dimension(new_width, newSize.height);
     }
 
     void recalculateSize(Dimension boundary) {
-//        System.out.println("Recalculating those dimensions");
+        // System.out.println("Recalculating those dimensions");
         heightRatio = (boundary.height / 800.0f) + 0.0275f;
         widthRatio = boundary.width / 600.0f;
         System.out.println(boundary.height);
-        uLength = (int)(30 * widthRatio);               // Length of each unit square
+        uLength = (int) (30 * widthRatio); // Length of each unit square
         if (uLength != prevULength) {
-            canvasXMax = xPos + (canvasSquareWidth * uLength);    // bottom-left of the main canvas
-            canvasYMax = yPos + (canvasSquareHeight * uLength);    // bottom-right of the main canvas
+            canvasXMax = xPos + (canvasSquareWidth * uLength); // bottom-left of the main canvas
+            canvasYMax = yPos + (canvasSquareHeight * uLength); // bottom-right of the main canvas
             width = canvasXMax - xPos;
             height = canvasYMax - yPos;
             prevULength = uLength;
@@ -132,19 +135,19 @@ public class TetrisMainCanvas extends Canvas {
 
         // Update state
         if (!pauseButton.isVisible()) { // Play state
-//        // Move active square down by 1
-          activeShape.incYPosition();
+            // // Move active square down by 1
+            activeShape.incYPosition();
 
-          if (isCollided(activeShape)) {
-            System.out.println("Collision detected");
-            if (!activeShape.isCollidedWithFloor()) {
-              activeShape.decYPosition(); // Corrected position
+            if (isCollided(activeShape)) {
+                System.out.println("Collision detected");
+                if (!activeShape.isCollidedWithFloor()) {
+                    activeShape.decYPosition(); // Corrected position
+                }
+                shapes.add(activeShape);
+                activeShape = nextShape;
+                activeShape.setxPos(centerX);
+                nextShape = pickNextShape();
             }
-            shapes.add(activeShape);
-            activeShape = nextShape;
-            activeShape.setxPos(centerX);
-            nextShape = pickNextShape();
-          }
         }
 
     }
@@ -201,28 +204,29 @@ public class TetrisMainCanvas extends Canvas {
         Graphics2D g2 = (Graphics2D) g;
 
         // Draw score labels
-////        System.out.println("Drawing labels");
-//        g.setColor(Color.BLACK);
-////        System.out.println("\tSet color");
-//        g.setFont(defaultFont);
-////        System.out.println("\tSet font");
-//        g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
-////        System.out.println("\tLevel: " + level);
-//        g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
-////        System.out.println("\tLines: " + lines);
-//        g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
-////        System.out.println("\tScore: " + score);
+        // System.out.println("Drawing labels");
+        g.setColor(Color.BLACK);
+        // System.out.println("\tSet color");
+        g.setFont(defaultFont);
+        // System.out.println("\tSet font");
+        g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
+        // System.out.println("\tLevel: " + level);
+        g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
+        // System.out.println("\tLines: " + lines);
+        g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
+        // System.out.println("\tScore: " + score);
 
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
         System.out.println("widthRatio: " + widthRatio + " heightRatio: " + heightRatio);
-        System.out.println("xPosMax: " + canvasXMax + " yPosMax: " + canvasYMax + " xPos: " + xPos + " yPos " + yPos + " uLength: " + uLength + " width: " + width + " height: " + height);
+        System.out.println("xPosMax: " + canvasXMax + " yPosMax: " + canvasYMax + " xPos: " + xPos + " yPos " + yPos
+                + " uLength: " + uLength + " width: " + width + " height: " + height);
 
         // Draw the debug grid lines
-//        for (int x = 0; x < canvasSquareWidth; x++) {
-//            for (int y = 0; y < canvasSquareHeight; y++) {
-//                drawUnit(new UnitSquare(x, y, Color.WHITE), g);
-//            }
-//        }
+        // for (int x = 0; x < canvasSquareWidth; x++) {
+        // for (int y = 0; y < canvasSquareHeight; y++) {
+        // drawUnit(new UnitSquare(x, y, Color.WHITE), g);
+        // }
+        // }
 
         drawShape(activeShape, g);
 
@@ -238,7 +242,6 @@ public class TetrisMainCanvas extends Canvas {
             pauseButton.draw(xPos + (width / 2), yPos + (height / 2), g);
         }
 
-
         quitButton.draw(canvasXMax + 100, yPos + (height - 20), g);
     }
 
@@ -252,7 +255,7 @@ public class TetrisMainCanvas extends Canvas {
      * Draws a unit square
      *
      * @param square Square to draw
-     * @param g Graphics instance
+     * @param g      Graphics instance
      */
     private void drawUnit(UnitSquare square, Graphics g) {
         int x = xPos + (square.getCanvasX() * uLength);
@@ -271,4 +274,3 @@ public class TetrisMainCanvas extends Canvas {
         g.drawLine(x, y + uLength, x, y);
     }
 }
-
