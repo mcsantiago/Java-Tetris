@@ -16,7 +16,8 @@ public abstract class Shape {
   public abstract Color getColor();
 
   public void setxPos(int xPos) {
-    int dx = this.xPos - xPos;
+    int dx = xPos - this.xPos;
+    System.out.println("currentXPos: " + this.xPos + " destinationXPos: " + xPos + " dx: " + dx);
     this.xPos += dx;
     for (UnitSquare square : squares) {
       square.incCanvasXBy(dx);

@@ -13,11 +13,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TetrisMainCanvas extends Canvas {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -5028476911135615583L;
-
     Dimension d;
 
     int canvasSquareWidth = 10; // 10 squares wide
@@ -64,20 +59,9 @@ public class TetrisMainCanvas extends Canvas {
 
         shapes = new ArrayList<>();
 
-        // The following section is for demo only
-        activeShape = new IShape(centerX, canvasSquareHeight - 1);
-        // nextShape = pickNextShape();
-        // shapes.add(new JShape(centerX, 2));
-        // shapes.add(new OShape(centerX-3, 1));
-        // shapes.add(new ZShape(centerX+3, 1));
-        // shapes.add(new SShape(centerX+3, 3));
-        // shapes.add(new LShape(centerX+3, 6));
-        // shapes.add(new TShape(4, 3));
-
-        // TODO: Enable the commented out section for playable game
-        // activeShape = pickNextShape();
-        // activeShape.setxPos(centerX);
-        // nextShape = pickNextShape();
+        activeShape = pickNextShape();
+        activeShape.setxPos(centerX);
+        nextShape = pickNextShape();
 
         setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
         addComponentListener(new ComponentAdapter() {
@@ -113,7 +97,6 @@ public class TetrisMainCanvas extends Canvas {
     }
 
     void recalculateSize(Dimension boundary) {
-        // System.out.println("Recalculating those dimensions");
         heightRatio = (boundary.height / 800.0f) + 0.0275f;
         widthRatio = boundary.width / 600.0f;
         System.out.println(boundary.height);
@@ -131,7 +114,14 @@ public class TetrisMainCanvas extends Canvas {
      * Updates the entire canvas
      */
     public void updateStep() {
-        System.out.println("Update Step");
+        Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
+
+        double relativeMouseX = currentMousePos.x - this.getLocationOnScreen().x;
+        double relativeMouseY = currentMousePos.y - this.getLocationOnScreen().y;
+
+        boolean isPauseButtonVisible = isWithinCanvas(relativeMouseX, relativeMouseY);
+
+        pauseButton.setVisible(isPauseButtonVisible);
 
         // Update state
         if (!pauseButton.isVisible()) { // Play state
@@ -139,7 +129,6 @@ public class TetrisMainCanvas extends Canvas {
             activeShape.incYPosition();
 
             if (isCollided(activeShape)) {
-                System.out.println("Collision detected");
                 if (!activeShape.isCollidedWithFloor()) {
                     activeShape.decYPosition(); // Corrected position
                 }
@@ -161,7 +150,6 @@ public class TetrisMainCanvas extends Canvas {
         for (Shape shape : shapes) {
             collided |= (activeShape.isCollidedWith(shape));
         }
-        System.out.println("Collided = " + collided);
         return collided || activeShape.isCollidedWithFloor();
     }
 
@@ -200,26 +188,16 @@ public class TetrisMainCanvas extends Canvas {
      * Draws the entire canvas
      */
     public void paint(Graphics g) {
-        System.out.println("Paint call");
         Graphics2D g2 = (Graphics2D) g;
 
         // Draw score labels
-        // System.out.println("Drawing labels");
         g.setColor(Color.BLACK);
-        // System.out.println("\tSet color");
         g.setFont(defaultFont);
-        // System.out.println("\tSet font");
         g2.drawString("Level: " + level, canvasXMax + 50, yPos + (height / 2) - 40);
-        // System.out.println("\tLevel: " + level);
         g2.drawString("Lines: " + lines, canvasXMax + 50, yPos + (height / 2));
-        // System.out.println("\tLines: " + lines);
         g2.drawString("Score: " + score, canvasXMax + 50, yPos + (height / 2) + 40);
-        // System.out.println("\tScore: " + score);
 
         GraphicsUtils.drawBorder(xPos, yPos, width, height, 5, g);
-        System.out.println("widthRatio: " + widthRatio + " heightRatio: " + heightRatio);
-        System.out.println("xPosMax: " + canvasXMax + " yPosMax: " + canvasYMax + " xPos: " + xPos + " yPos " + yPos
-                + " uLength: " + uLength + " width: " + width + " height: " + height);
 
         // Draw the debug grid lines
         // for (int x = 0; x < canvasSquareWidth; x++) {
