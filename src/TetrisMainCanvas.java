@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class TetrisMainCanvas extends Canvas {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5028476911135615583L;
+
     Dimension d;
 
     int canvasSquareWidth = 10; // 10 squares wide
@@ -60,7 +65,8 @@ public class TetrisMainCanvas extends Canvas {
 
         shapes = new ArrayList<>();
 
-        activeShape = pickNextShape();
+        // activeShape = pickNextShape();
+        activeShape = new JShape(centerX, canvasSquareHeight - 2);
         activeShape.setxPos(centerX);
         nextShape = pickNextShape();
 
@@ -163,6 +169,8 @@ public class TetrisMainCanvas extends Canvas {
         if (!pauseButton.isVisible()) { // Play state
             // // Move active square down by 1
             activeShape.incYPosition();
+            activeShape.rotateClockwise();
+            ; // DEBUG
 
             if (isCollided(activeShape)) {
                 if (!activeShape.isCollidedWithFloor()) {

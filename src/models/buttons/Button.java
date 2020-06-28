@@ -21,12 +21,12 @@ public abstract class Button implements IClickable {
   }
 
   public boolean isWithinButton(double x, double y) {
-    return (x >= this.x - (label.length() * 15) && x <= this.x + (label.length() * 10) &&
-            y >= this.y - 24 && y <= this.y + 24);
+    return (x >= this.x - (label.length() * 15) && x <= this.x + (label.length() * 10) && y >= this.y - 24
+        && y <= this.y + 24);
   }
 
   public void draw(int x, int y, Graphics g) {
-    this.x = x; // TODO: This should not be here.. but it works for now
+    this.x = x;
     this.y = y;
 
     Graphics2D g2 = (Graphics2D) g;
@@ -34,9 +34,9 @@ public abstract class Button implements IClickable {
     g.setFont(buttonFont);
     g2.drawString(label, x - (label.length() * 10), y);
     ((Graphics2D) g).setStroke(new BasicStroke(1));
-    g.drawLine(x-(label.length() * 15), y - 24, x+(label.length() * 10), y-24);
-    g.drawLine(x+(label.length() * 10), y - 24, x+(label.length() * 10), y+24);
-    g.drawLine(x+(label.length() * 10), y + 24, x-(label.length() * 15), y+24);
-    g.drawLine(x-(label.length() * 15), y + 24, x-(label.length() * 15), y-24);
+    g.drawLine(x - (label.length() * 15), y - 24, x + (label.length() * 10), y - 24);
+    g.drawLine(x + (label.length() * 10), y - 24, x + (label.length() * 10), y + 24);
+    g.drawLine(x + (label.length() * 10), y + 24, x - (label.length() * 15), y + 24);
+    g.drawLine(x - (label.length() * 15), y + 24, x - (label.length() * 15), y - 24);
   }
 }

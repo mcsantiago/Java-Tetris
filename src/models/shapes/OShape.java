@@ -3,7 +3,7 @@ package models.shapes;
 import java.awt.*;
 
 public class OShape extends Shape {
-  public OShape(int xPos, int yPos) {
+  public OShape(final int xPos, final int yPos) {
     super(xPos, yPos);
     squares.add(new UnitSquare(xPos, yPos, getColor()));
     squares.add(new UnitSquare(xPos + 1, yPos, getColor()));
@@ -14,5 +14,13 @@ public class OShape extends Shape {
   @Override
   public Color getColor() {
     return Color.blue;
+  }
+
+  @Override
+  public void rotateClockwise() {
+  }
+
+  @Override
+  public void rotateCounterClockwise() {
   }
 }

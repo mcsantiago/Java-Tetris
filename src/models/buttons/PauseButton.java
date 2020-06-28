@@ -7,8 +7,8 @@ public class PauseButton extends Button {
         this.label = "PAUSE";
         this.color = Color.BLUE;
     }
+
     @Override
     public void onClick() {
-        // TODO:
     }
 }

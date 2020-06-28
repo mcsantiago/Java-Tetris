@@ -91,11 +91,61 @@ public abstract class Shape {
         return false;
     }
 
+    /**
+     * Rotates the shape clockwise
+     */
     public void rotateClockwise() {
-        throw new UnsupportedOperationException("Unimplemented case: rotateClockwise()");
+        UnitSquare pivot = squares.get(1);
+        int pivotX = pivot.getCanvasX();
+        int pivotY = pivot.getCanvasY();
+        System.out.println("pivot x: " + pivotX + " y: " + pivotY);
+
+        for (UnitSquare square : squares) {
+            if (square != pivot) {
+                // Translate
+                int newCanvasX = square.getCanvasX() - pivotX;
+                int newCanvasY = square.getCanvasY() - pivotY;
+
+                // Rotate 90
+                int tmpX = newCanvasX;
+                newCanvasX = -newCanvasY;
+                newCanvasY = tmpX;
+
+                System.out.println("newCanvas x: " + newCanvasX + pivotX + " y: " + newCanvasY + pivotY);
+
+                square.setCanvasX(newCanvasX + pivotX);
+                square.setCanvasY(newCanvasY + pivotY);
+            }
+        }
     }
 
+    /**
+     * Rotates the shape counter-clockwise
+     */
     public void rotateCounterClockwise() {
-        throw new UnsupportedOperationException("Unimplemented case: rotateCounterClockwise()");
+        UnitSquare pivot = squares.get(1);
+        int pivotX = pivot.getCanvasX();
+        int pivotY = pivot.getCanvasY();
+        System.out.println("pivot x: " + pivotX + " y: " + pivotY);
+
+        for (UnitSquare square : squares) {
+            if (square != pivot) {
+                // Translate
+                int newCanvasX = square.getCanvasX() - pivotX;
+                int newCanvasY = square.getCanvasY() - pivotY;
+
+                // Rotate 90
+                // TODO: Counter-clockwise rotation
+                int tmpX = newCanvasX;
+                newCanvasX = -newCanvasY;
+                newCanvasY = tmpX;
+
+                System.out.println("newCanvas x: " + newCanvasX + pivotX + " y: " + newCanvasY + pivotY);
+
+                square.setCanvasX(newCanvasX + pivotX);
+                square.setCanvasY(newCanvasY + pivotY);
+            }
+        }
+
     }
 }

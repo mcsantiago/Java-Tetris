@@ -21,6 +21,14 @@ public class UnitSquare {
     return canvasY;
   }
 
+  public void setCanvasX(int canvasX) {
+    this.canvasX = canvasX;
+  }
+
+  public void setCanvasY(int canvasY) {
+    this.canvasY = canvasY;
+  }
+
   public Color getColor() {
     return color;
   }
