@@ -198,28 +198,29 @@ public class TetrisMainCanvas extends Canvas {
     private Shape pickNextShape() {
         int nextShapeId = ThreadLocalRandom.current().nextInt(0, 7);
         switch (nextShapeId) {
-            case 0 -> {
+            case 0: {
                 return new OShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
-            case 1 -> {
+            case 1: {
                 return new TShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
-            case 2 -> {
+            case 2: {
                 return new IShape(canvasSquareWidth + 2, canvasSquareHeight - 3);
             }
-            case 3 -> {
+            case 3: {
                 return new LShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
-            case 4 -> {
+            case 4: {
                 return new JShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
-            case 5 -> {
+            case 5: {
                 return new SShape(canvasSquareWidth + 4, canvasSquareHeight - 3);
             }
-            case 6 -> {
+            case 6: {
                 return new ZShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
             }
-            default -> throw new IndexOutOfBoundsException("Shape not found");
+            default:
+                throw new IndexOutOfBoundsException("Shape not found");
         }
     }
 
