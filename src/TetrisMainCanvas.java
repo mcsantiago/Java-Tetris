@@ -9,6 +9,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -73,6 +74,9 @@ public class TetrisMainCanvas extends Canvas {
         });
 
         addMouseListener(new MouseAdapter() {
+            /**
+             * Mouse click controls the lateral movement of the tetroid.
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -86,11 +90,37 @@ public class TetrisMainCanvas extends Canvas {
                     System.out.println("buttonCode: " + buttonCode);
                     switch (buttonCode) {
                         case MouseEvent.BUTTON1:
-                            activeShape.decXPosition();
+                            activeShape.moveLeft();
                             break;
                         case MouseEvent.BUTTON3:
-                            activeShape.incXPosition();
+                            activeShape.moveRight();
                             break;
+                    }
+                }
+            }
+
+            /**
+             * Mouse wheel controls the rotation of the active shape.
+             */
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                int notches = e.getWheelRotation();
+                System.out.println("Mouse wheel moved");
+                if (notches < 0) {
+                    System.out.println("Mouse wheel moved UP " + -notches + " notch(es)");
+                    if (pauseButton.isVisible()) {
+                        while (notches > 0) {
+                            activeShape.rotateClockwise();
+                            notches--;
+                        }
+                    }
+                } else {
+                    System.out.println("Mouse wheel moved DOWN " + notches + " notch(es)");
+                    if (pauseButton.isVisible()) {
+                        while (notches > 0) {
+                            activeShape.rotateCounterClockwise();
+                            notches--;
+                        }
                     }
                 }
             }
