@@ -13,42 +13,38 @@ import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+@SuppressWarnings("serial")
 public class TetrisMainCanvas extends Canvas {
-    /**
-     *
-     */
-    private static final long serialVersionUID = -5028476911135615583L;
+    private Dimension d;
 
-    Dimension d;
+    private int canvasSquareWidth = 10; // 10 squares wide
+    private int canvasSquareHeight = 20; // 20 squares high
+    private float heightRatio;
+    private float widthRatio;
+    private int uLength; // Length of each unit square
+    private int prevULength;
 
-    int canvasSquareWidth = 10; // 10 squares wide
-    int canvasSquareHeight = 20; // 20 squares high
-    float heightRatio;
-    float widthRatio;
-    int uLength; // Length of each unit square
-    int prevULength;
+    private int xPos; // top-left of the main canvas
+    private int yPos; // top-right of the main canvas
+    private int canvasXMax; // bottom-left of the main canvas
+    private int canvasYMax; // bottom-right of the main canvas
+    private int centerX = (canvasSquareWidth / 2) - 1;
 
-    int xPos; // top-left of the main canvas
-    int yPos; // top-right of the main canvas
-    int canvasXMax; // bottom-left of the main canvas
-    int canvasYMax; // bottom-right of the main canvas
-    int centerX = (canvasSquareWidth / 2) - 1;
+    private int width;
+    private int height;
 
-    int width;
-    int height;
+    private int level = 1;
+    private int lines = 0;
+    private int score = 0;
 
-    int level = 1;
-    int lines = 0;
-    int score = 0;
+    private Font defaultFont = new Font("Arial", Font.PLAIN, 16);
 
-    Font defaultFont = new Font("Arial", Font.PLAIN, 16);
+    private PauseButton pauseButton = new PauseButton();
+    private QuitButton quitButton = new QuitButton();
 
-    PauseButton pauseButton = new PauseButton();
-    QuitButton quitButton = new QuitButton();
-
-    ArrayList<models.shapes.Shape> shapes;
-    Shape activeShape;
-    Shape nextShape;
+    private ArrayList<models.shapes.Shape> shapes;
+    private Shape activeShape;
+    private Shape nextShape;
 
     public TetrisMainCanvas() {
         d = new Dimension(600, 778);
@@ -110,6 +106,7 @@ public class TetrisMainCanvas extends Canvas {
              */
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
+                super.mouseWheelMoved(e);
                 int notches = e.getWheelRotation();
                 System.out.println("Mouse wheel moved");
                 if (notches < 0) {
@@ -133,12 +130,12 @@ public class TetrisMainCanvas extends Canvas {
         });
     }
 
-    Dimension recalculateDimensions(Dimension newSize) {
+    private Dimension recalculateDimensions(Dimension newSize) {
         int new_width = (newSize.height * d.width) / d.height; // scale width to maintain aspect ratio
         return new Dimension(new_width, newSize.height);
     }
 
-    void recalculateSize(Dimension boundary) {
+    private void recalculateSize(Dimension boundary) {
         heightRatio = (boundary.height / 800.0f) + 0.0275f;
         widthRatio = boundary.width / 600.0f;
         System.out.println(boundary.height);
@@ -169,7 +166,6 @@ public class TetrisMainCanvas extends Canvas {
         if (!pauseButton.isVisible()) { // Play state
             // // Move active square down by 1
             activeShape.incYPosition();
-            activeShape.rotateCounterClockwise(); // DEBUG
 
             if (isCollided(activeShape)) {
                 if (!activeShape.isCollidedWithFloor()) {
