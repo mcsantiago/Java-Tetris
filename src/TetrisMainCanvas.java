@@ -71,6 +71,7 @@ public class TetrisMainCanvas extends Canvas {
                 recalculateSize(recalculateDimensions(getSize()));
             }
         });
+
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -79,14 +80,19 @@ public class TetrisMainCanvas extends Canvas {
                 if (quitButton.isWithinButton(p.x, p.y)) {
                     System.exit(0);
                 }
-            }
 
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                super.mouseMoved(e);
-                Point p = e.getPoint();
-                boolean isPauseButtonVisible = isWithinCanvas(p.x, p.y);
-                pauseButton.setVisible(isPauseButtonVisible);
+                if (!pauseButton.isVisible()) {
+                    int buttonCode = e.getButton();
+                    System.out.println("buttonCode: " + buttonCode);
+                    switch (buttonCode) {
+                        case MouseEvent.BUTTON1:
+                            activeShape.decXPosition();
+                            break;
+                        case MouseEvent.BUTTON3:
+                            activeShape.incXPosition();
+                            break;
+                    }
+                }
             }
         });
     }

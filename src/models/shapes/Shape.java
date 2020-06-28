@@ -38,6 +38,33 @@ public abstract class Shape {
     }
   }
 
+  public void decXPosition() {
+    // Have to do this to check the xPosition of each square...
+    for (UnitSquare square : squares) {
+      if (square.getCanvasX() <= 0) {
+        return;
+      }
+    }
+    xPos--;
+    for (UnitSquare square : squares) {
+      square.incCanvasXBy(-1);
+    }
+  }
+
+  public void incXPosition() {
+    // Have to do this to check the xPosition of each square...
+    for (UnitSquare square : squares) {
+      if (square.getCanvasX() > 8) {
+        return;
+      }
+    }
+    System.out.println("xPos: " + xPos);
+    xPos++;
+    for (UnitSquare square : squares) {
+      square.incCanvasXBy(1);
+    }
+  }
+
   public ArrayList<UnitSquare> getSquares() {
     return squares;
   }
@@ -45,7 +72,7 @@ public abstract class Shape {
   public boolean isCollidedWith(Shape shape) {
     for (UnitSquare square : squares) {
       for (UnitSquare other : shape.squares) {
-        if ((square.canvasX == other.canvasX) && (square.canvasY == other.canvasY)) {
+        if ((square.getCanvasX() == other.getCanvasX()) && (square.getCanvasY() == other.getCanvasY())) {
           return true;
         }
       }

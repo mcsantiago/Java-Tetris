@@ -3,9 +3,9 @@ package models.shapes;
 import java.awt.*;
 
 public class UnitSquare {
-  int canvasX; // x-pos of the topLeft corner (Canvas Units)
-  int canvasY; // y-pos of the topLeft corner (Canvas Units)
-  Color color; // Color of the square
+  private int canvasX; // x-pos of the topLeft corner (Canvas Units)
+  private int canvasY; // y-pos of the topLeft corner (Canvas Units)
+  private Color color; // Color of the square
 
   public UnitSquare(int canvasX, int canvasY, Color color) {
     this.canvasX = canvasX;

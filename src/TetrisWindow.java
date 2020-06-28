@@ -39,7 +39,7 @@ public class TetrisWindow extends Frame {
                 }
             }
         });
-        setTitle("Assignment 1 - Q2");
+        setTitle("Assignment 2");
         setBackground(Color.white);
         setSize(600, 800);
         add(canvas);
@@ -47,12 +47,9 @@ public class TetrisWindow extends Frame {
     }
 
     private void togglePausedState() {
-        System.out.println("Escape key pressed");
         if (currentState == GameState.PAUSED) {
-            System.out.println("\trunning");
             currentState = GameState.RUNNING;
         } else if (currentState == GameState.RUNNING) {
-            System.out.println("\tpausing");
             currentState = GameState.PAUSED;
         }
     }
