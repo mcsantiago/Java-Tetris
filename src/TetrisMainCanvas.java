@@ -75,6 +75,26 @@ public class TetrisMainCanvas extends Canvas {
             }
         });
 
+        addMouseWheelListener(new MouseAdapter() {
+            /**
+             * Mouse wheel controls the rotation of the active shape.
+             */
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                super.mouseWheelMoved(e);
+                int notches = e.getWheelRotation();
+                System.out.println("Mouse wheel moved");
+                if (notches < 0) {
+                    System.out.println("Mouse wheel moved UP " + -notches + " notch(es)");
+                    activeShape.rotateClockwise();
+                } else {
+                    System.out.println("Mouse wheel moved DOWN " + notches + " notch(es)");
+                    activeShape.rotateCounterClockwise();
+                }
+            }
+
+        });
+
         addMouseListener(new MouseAdapter() {
             /**
              * Mouse click controls the lateral movement of the tetroid.
@@ -101,32 +121,6 @@ public class TetrisMainCanvas extends Canvas {
                 }
             }
 
-            /**
-             * Mouse wheel controls the rotation of the active shape.
-             */
-            @Override
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                super.mouseWheelMoved(e);
-                int notches = e.getWheelRotation();
-                System.out.println("Mouse wheel moved");
-                if (notches < 0) {
-                    System.out.println("Mouse wheel moved UP " + -notches + " notch(es)");
-                    if (pauseButton.isVisible()) {
-                        while (notches > 0) {
-                            activeShape.rotateClockwise();
-                            notches--;
-                        }
-                    }
-                } else {
-                    System.out.println("Mouse wheel moved DOWN " + notches + " notch(es)");
-                    if (pauseButton.isVisible()) {
-                        while (notches > 0) {
-                            activeShape.rotateCounterClockwise();
-                            notches--;
-                        }
-                    }
-                }
-            }
         });
     }
 
