@@ -169,8 +169,7 @@ public class TetrisMainCanvas extends Canvas {
         if (!pauseButton.isVisible()) { // Play state
             // // Move active square down by 1
             activeShape.incYPosition();
-            activeShape.rotateClockwise();
-            ; // DEBUG
+            activeShape.rotateCounterClockwise(); // DEBUG
 
             if (isCollided(activeShape)) {
                 if (!activeShape.isCollidedWithFloor()) {

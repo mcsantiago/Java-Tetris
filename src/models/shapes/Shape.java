@@ -137,8 +137,8 @@ public abstract class Shape {
                 // Rotate 90
                 // TODO: Counter-clockwise rotation
                 int tmpX = newCanvasX;
-                newCanvasX = -newCanvasY;
-                newCanvasY = tmpX;
+                newCanvasX = newCanvasY;
+                newCanvasY = -tmpX;
 
                 System.out.println("newCanvas x: " + newCanvasX + pivotX + " y: " + newCanvasY + pivotY);
 
