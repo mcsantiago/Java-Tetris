@@ -1,5 +1,6 @@
 [] FEATURE - Implement double buffering
 [] BUG - Shapes collide into each other
+[] BUG - Shapes can rotate outside of the play area
 
 Assignment 3:
 [] Add M, N, S constants as per pdf

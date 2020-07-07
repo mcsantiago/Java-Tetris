@@ -52,12 +52,10 @@ public class TetrisMainCanvas extends Canvas {
     heightRatio = (d.height / 800.0f) + 0.0275f;
     widthRatio = d.width / 600.0f;
     prevULength = uLength = d.height / 30; // Length of each unit square
-    canvasXMax =
-        Math.round(
-            (xPos + (canvasSquareWidth * uLength)) * widthRatio); // bottom-left of the main canvas
-    canvasYMax =
-        Math.round(
-            (yPos + (canvasSquareHeight * uLength)) * heightRatio); // bottom-right of the main
+    canvasXMax = Math.round((xPos + (canvasSquareWidth * uLength)) * widthRatio); // bottom-left of
+                                                                                  // the main canvas
+    canvasYMax = Math.round((yPos + (canvasSquareHeight * uLength)) * heightRatio); // bottom-right
+                                                                                    // of the main
     // canvas
     width = canvasXMax - xPos;
     height = canvasYMax - yPos;
@@ -69,60 +67,57 @@ public class TetrisMainCanvas extends Canvas {
     nextShape = pickNextShape();
 
     setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
-    addComponentListener(
-        new ComponentAdapter() {
-          @Override
-          public void componentResized(ComponentEvent e) {
-            super.componentResized(e);
-            recalculateSize(recalculateDimensions(getSize()));
-          }
-        });
+    addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        super.componentResized(e);
+        recalculateSize(recalculateDimensions(getSize()));
+      }
+    });
 
-    addMouseWheelListener(
-        new MouseAdapter() {
-          /** Mouse wheel controls the rotation of the active shape. */
-          @Override
-          public void mouseWheelMoved(MouseWheelEvent e) {
-            super.mouseWheelMoved(e);
-            if (!pauseButton.isVisible()) {
-              int notches = e.getWheelRotation();
-              System.out.println("Mouse wheel moved");
-              if (notches < 0) {
-                System.out.println("Mouse wheel moved UP " + -notches + " notch(es)");
-                activeShape.rotateClockwise();
-              } else {
-                System.out.println("Mouse wheel moved DOWN " + notches + " notch(es)");
-                activeShape.rotateCounterClockwise();
-              }
-            }
+    addMouseWheelListener(new MouseAdapter() {
+      /** Mouse wheel controls the rotation of the active shape. */
+      @Override
+      public void mouseWheelMoved(MouseWheelEvent e) {
+        super.mouseWheelMoved(e);
+        if (!pauseButton.isVisible()) {
+          int notches = e.getWheelRotation();
+          System.out.println("Mouse wheel moved");
+          if (notches < 0) {
+            System.out.println("Mouse wheel moved UP " + -notches + " notch(es)");
+            activeShape.rotateClockwise(shapes);
+          } else {
+            System.out.println("Mouse wheel moved DOWN " + notches + " notch(es)");
+            activeShape.rotateCounterClockwise(shapes);
           }
-        });
+        }
+      }
+    });
 
-    addMouseListener(
-        new MouseAdapter() {
-          /** Mouse click controls the lateral movement of the tetroid. */
-          @Override
-          public void mouseClicked(MouseEvent e) {
-            super.mouseClicked(e);
-            Point p = e.getPoint();
-            if (quitButton.isWithinButton(p.x, p.y)) {
-              System.exit(0);
-            }
+    addMouseListener(new MouseAdapter() {
+      /** Mouse click controls the lateral movement of the tetroid. */
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        super.mouseClicked(e);
+        Point p = e.getPoint();
+        if (quitButton.isWithinButton(p.x, p.y)) {
+          System.exit(0);
+        }
 
-            if (!pauseButton.isVisible()) {
-              int buttonCode = e.getButton();
-              System.out.println("buttonCode: " + buttonCode);
-              switch (buttonCode) {
-                case MouseEvent.BUTTON1:
-                  activeShape.moveLeft();
-                  break;
-                case MouseEvent.BUTTON3:
-                  activeShape.moveRight();
-                  break;
-              }
-            }
+        if (!pauseButton.isVisible()) {
+          int buttonCode = e.getButton();
+          System.out.println("buttonCode: " + buttonCode);
+          switch (buttonCode) {
+            case MouseEvent.BUTTON1:
+              activeShape.moveLeft(shapes);
+              break;
+            case MouseEvent.BUTTON3:
+              activeShape.moveRight(shapes);
+              break;
           }
-        });
+        }
+      }
+    });
   }
 
   private Dimension recalculateDimensions(Dimension newSize) {
@@ -178,7 +173,7 @@ public class TetrisMainCanvas extends Canvas {
   private boolean isCollided(Shape activeShape) {
     boolean collided = false;
     for (Shape shape : shapes) {
-      collided |= (activeShape.isCollidedWith(shape));
+      collided |= (activeShape.isCollidedWithShape(shape));
     }
     return collided || activeShape.isCollidedWithFloor();
   }
@@ -187,34 +182,27 @@ public class TetrisMainCanvas extends Canvas {
   private Shape pickNextShape() {
     int nextShapeId = ThreadLocalRandom.current().nextInt(0, 7);
     switch (nextShapeId) {
-      case 0:
-        {
-          return new OShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
-        }
-      case 1:
-        {
-          return new TShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
-        }
-      case 2:
-        {
-          return new IShape(canvasSquareWidth + 2, canvasSquareHeight - 3);
-        }
-      case 3:
-        {
-          return new LShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
-        }
-      case 4:
-        {
-          return new JShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
-        }
-      case 5:
-        {
-          return new SShape(canvasSquareWidth + 4, canvasSquareHeight - 3);
-        }
-      case 6:
-        {
-          return new ZShape(canvasSquareWidth + 3, canvasSquareHeight - 3);
-        }
+      case 0: {
+        return new OShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+      }
+      case 1: {
+        return new TShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+      }
+      case 2: {
+        return new IShape(canvasSquareWidth + 2, canvasSquareHeight - 1);
+      }
+      case 3: {
+        return new LShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+      }
+      case 4: {
+        return new JShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+      }
+      case 5: {
+        return new SShape(canvasSquareWidth + 4, canvasSquareHeight - 1);
+      }
+      case 6: {
+        return new ZShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+      }
       default:
         throw new IndexOutOfBoundsException("Shape not found");
     }
@@ -267,7 +255,7 @@ public class TetrisMainCanvas extends Canvas {
    * Draws a unit square
    *
    * @param square Square to draw
-   * @param g Graphics instance
+   * @param g      Graphics instance
    */
   private void drawUnit(UnitSquare square, Graphics g) {
     int x = xPos + (square.getCanvasX() * uLength);

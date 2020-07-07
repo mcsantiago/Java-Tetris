@@ -4,8 +4,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public abstract class Shape {
-  int xPos, yPos;
-  ArrayList<UnitSquare> squares;
+  protected int xPos, yPos;
+  protected ArrayList<UnitSquare> squares;
 
   public Shape(int xPos, int yPos) {
     this.xPos = xPos;
@@ -38,24 +38,41 @@ public abstract class Shape {
     }
   }
 
-  public void moveLeft() {
+  public void moveLeft(java.util.List<Shape> shapes) {
     // Have to do this to check the xPosition of each square...
     for (UnitSquare square : squares) {
       if (square.getCanvasX() <= 0) {
         return;
       }
+      for (Shape shape : shapes) {
+        for (UnitSquare other : shape.squares) {
+          if (square.getCanvasX() - 1 == other.getCanvasX()
+              && square.getCanvasY() == other.getCanvasY()) {
+            return; // Don't run into other shapes
+          }
+        }
+      }
     }
+
     xPos--;
     for (UnitSquare square : squares) {
       square.incCanvasXBy(-1);
     }
   }
 
-  public void moveRight() {
+  public void moveRight(java.util.List<Shape> shapes) {
     // Have to do this to check the xPosition of each square...
     for (UnitSquare square : squares) {
       if (square.getCanvasX() > 8) {
         return;
+      }
+      for (Shape shape : shapes) {
+        for (UnitSquare other : shape.squares) {
+          if (square.getCanvasX() + 1 == other.getCanvasX()
+              && square.getCanvasY() == other.getCanvasY()) {
+            return; // Don't run into other shapes
+          }
+        }
       }
     }
     System.out.println("xPos: " + xPos);
@@ -69,7 +86,7 @@ public abstract class Shape {
     return squares;
   }
 
-  public boolean isCollidedWith(Shape shape) {
+  public boolean isCollidedWithShape(Shape shape) {
     for (UnitSquare square : squares) {
       for (UnitSquare other : shape.squares) {
         if ((square.getCanvasX() == other.getCanvasX())
@@ -94,11 +111,21 @@ public abstract class Shape {
   }
 
   /** Rotates the shape clockwise */
-  public void rotateClockwise() {
+  public void rotateClockwise(java.util.List<Shape> shapes) {
     UnitSquare pivot = squares.get(1);
     int pivotX = pivot.getCanvasX();
     int pivotY = pivot.getCanvasY();
-    System.out.println("pivot x: " + pivotX + " y: " + pivotY);
+
+    // Check if any squares outside of pivot are against right wall. If so, then we are at risk of
+    // clipping out. Abort!
+
+    for (UnitSquare square : squares) {
+      if (square != pivot) {
+        if (square.getCanvasX() == 19) {
+          return;
+        }
+      }
+    }
 
     for (UnitSquare square : squares) {
       if (square != pivot) {
@@ -111,7 +138,6 @@ public abstract class Shape {
         newCanvasX = -newCanvasY;
         newCanvasY = tmpX;
 
-        System.out.println("newCanvas x: " + newCanvasX + pivotX + " y: " + newCanvasY + pivotY);
 
         square.setCanvasX(newCanvasX + pivotX);
         square.setCanvasY(newCanvasY + pivotY);
@@ -120,11 +146,21 @@ public abstract class Shape {
   }
 
   /** Rotates the shape counter-clockwise */
-  public void rotateCounterClockwise() {
+  public void rotateCounterClockwise(java.util.List<Shape> shapes) {
     UnitSquare pivot = squares.get(1);
     int pivotX = pivot.getCanvasX();
     int pivotY = pivot.getCanvasY();
-    System.out.println("pivot x: " + pivotX + " y: " + pivotY);
+
+    // Check if any squares outside of pivot are against right wall. If so, then we are at risk of
+    // clipping out. Abort!
+
+    for (UnitSquare square : squares) {
+      if (square != pivot) {
+        if (square.getCanvasX() == 0) {
+          return;
+        }
+      }
+    }
 
     for (UnitSquare square : squares) {
       if (square != pivot) {
@@ -133,12 +169,10 @@ public abstract class Shape {
         int newCanvasY = square.getCanvasY() - pivotY;
 
         // Rotate 90
-        // TODO: Counter-clockwise rotation
         int tmpX = newCanvasX;
         newCanvasX = newCanvasY;
         newCanvasY = -tmpX;
 
-        System.out.println("newCanvas x: " + newCanvasX + pivotX + " y: " + newCanvasY + pivotY);
 
         square.setCanvasX(newCanvasX + pivotX);
         square.setCanvasY(newCanvasY + pivotY);
