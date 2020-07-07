@@ -29,6 +29,9 @@ public abstract class Button implements IClickable {
     this.x = x;
     this.y = y;
 
+    g.setColor(Color.WHITE);
+    g.fillRect(this.x - (label.length() * 15), this.y - 24, label.length() * 25, 48);
+
     Graphics2D g2 = (Graphics2D) g;
     g.setColor(color);
     g.setFont(buttonFont);
