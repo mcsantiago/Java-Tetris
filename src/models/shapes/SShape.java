@@ -13,6 +13,6 @@ public class SShape extends Shape {
 
   @Override
   public Color getColor() {
-    return Color.green;
+    return Color.getHSBColor(60f / 360f, 1.0f, 1.0f);
   }
 }

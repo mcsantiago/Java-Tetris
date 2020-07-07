@@ -13,6 +13,6 @@ public class TShape extends Shape {
 
   @Override
   public Color getColor() {
-    return Color.orange;
+    return Color.getHSBColor(45f / 360f, 1f, 1f);
   }
 }

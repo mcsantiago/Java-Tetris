@@ -13,14 +13,6 @@ public class OShape extends Shape {
 
   @Override
   public Color getColor() {
-    return Color.blue;
-  }
-
-  @Override
-  public void rotateClockwise() {
-  }
-
-  @Override
-  public void rotateCounterClockwise() {
+    return Color.getHSBColor(196f / 360f, 1f, 0.94f);
   }
 }

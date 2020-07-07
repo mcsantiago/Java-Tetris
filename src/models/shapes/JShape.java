@@ -13,6 +13,6 @@ public class JShape extends Shape {
 
     @Override
     public Color getColor() {
-        return Color.CYAN;
+        return Color.getHSBColor(274f / 360f, 0.7f, 0.63f);
     }
 }

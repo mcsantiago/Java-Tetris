@@ -13,6 +13,6 @@ public class IShape extends Shape {
 
     @Override
     public Color getColor() {
-        return Color.yellow;
+        return Color.getHSBColor(147.0f / 360.0f, 1.0f, 0.69f);
     }
 }

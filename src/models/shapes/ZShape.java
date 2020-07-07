@@ -13,6 +13,6 @@ public class ZShape extends Shape {
 
   @Override
   public Color getColor() {
-    return Color.red;
+    return Color.getHSBColor(205f / 360f, 1f, 0.75f);
   }
 }
