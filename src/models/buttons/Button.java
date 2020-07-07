@@ -1,7 +1,6 @@
 package models.buttons;
 
 import interfaces.IClickable;
-
 import java.awt.*;
 
 public abstract class Button implements IClickable {
@@ -21,7 +20,9 @@ public abstract class Button implements IClickable {
   }
 
   public boolean isWithinButton(double x, double y) {
-    return (x >= this.x - (label.length() * 15) && x <= this.x + (label.length() * 10) && y >= this.y - 24
+    return (x >= this.x - (label.length() * 15)
+        && x <= this.x + (label.length() * 10)
+        && y >= this.y - 24
         && y <= this.y + 24);
   }
 
@@ -36,7 +37,7 @@ public abstract class Button implements IClickable {
     g.setColor(color);
     g.setFont(buttonFont);
     g2.drawString(label, x - (label.length() * 10), y);
-    ((Graphics2D) g).setStroke(new BasicStroke(1));
+    g2.setStroke(new BasicStroke(1));
     g.drawLine(x - (label.length() * 15), y - 24, x + (label.length() * 10), y - 24);
     g.drawLine(x + (label.length() * 10), y - 24, x + (label.length() * 10), y + 24);
     g.drawLine(x + (label.length() * 10), y + 24, x - (label.length() * 15), y + 24);

@@ -1,6 +1,5 @@
 [] FEATURE - Implement double buffering
 [] BUG - Shapes collide into each other
-[~] TASK - Buttons should have white backgrounds to look nicer
 
 Assignment 3:
 [] Add M, N, S constants as per pdf
