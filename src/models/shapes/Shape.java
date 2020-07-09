@@ -24,14 +24,14 @@ public abstract class Shape {
     }
   }
 
-  public void decYPosition() {
+  public void moveUp() {
     yPos--;
     for (UnitSquare square : squares) {
       square.incCanvasYBy(-1);
     }
   }
 
-  public void incYPosition() {
+  public void moveDown() {
     yPos++;
     for (UnitSquare square : squares) {
       square.incCanvasYBy(1);
@@ -92,6 +92,7 @@ public abstract class Shape {
         if ((square.getCanvasX() == other.getCanvasX())
             && (square.getCanvasY() == other.getCanvasY())) {
           System.out.println(this.getClass() + " collided with shape");
+          moveUp(); // Collision resolution
           return true;
         }
       }

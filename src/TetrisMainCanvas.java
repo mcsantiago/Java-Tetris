@@ -152,12 +152,10 @@ public class TetrisMainCanvas extends Canvas {
     // Update state
     if (!pauseButton.isVisible()) { // Play state
       // // Move active square down by 1
-      activeShape.incYPosition();
+      activeShape.moveDown();
 
       if (isCollided(activeShape)) {
-        if (!activeShape.isCollidedWithFloor()) {
-          activeShape.decYPosition(); // Corrected position
-        }
+        // activeShape.moveDown(); // Corrected position
         shapes.add(activeShape);
         activeShape = nextShape;
         activeShape.setxPos(centerX);
