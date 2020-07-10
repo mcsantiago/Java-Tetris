@@ -203,4 +203,8 @@ public abstract class Shape {
     if (isAboveLine)
       moveDown();
   }
+
+  public int getYPosition() {
+    return this.yPos;
+  }
 }

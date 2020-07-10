@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import models.buttons.GameOverLabel;
 import models.buttons.PauseButton;
 import models.buttons.QuitButton;
 import models.shapes.*;
@@ -40,12 +41,15 @@ public class TetrisMainCanvas extends Canvas {
 
   private PauseButton pauseButton = new PauseButton();
   private QuitButton quitButton = new QuitButton();
+  private GameOverLabel gameOverLabel = new GameOverLabel();
 
   private ArrayList<models.shapes.Shape> shapes;
   private Shape activeShape;
   private Shape nextShape;
 
   private int M = 1, N = 20, S = 1;
+
+  private boolean gameOver = false;
 
   public TetrisMainCanvas() {
     d = new Dimension(600, 778);
@@ -148,28 +152,32 @@ public class TetrisMainCanvas extends Canvas {
 
   /** Updates the entire canvas */
   public void updateStep() {
-    Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
+    if (!gameOver) {
+      Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
 
-    double relativeMouseX = currentMousePos.x - this.getLocationOnScreen().x;
-    double relativeMouseY = currentMousePos.y - this.getLocationOnScreen().y;
+      double relativeMouseX = currentMousePos.x - this.getLocationOnScreen().x;
+      double relativeMouseY = currentMousePos.y - this.getLocationOnScreen().y;
 
-    boolean isPauseButtonVisible = isWithinCanvas(relativeMouseX, relativeMouseY);
+      boolean isPauseButtonVisible = isWithinCanvas(relativeMouseX, relativeMouseY);
 
-    pauseButton.setVisible(isPauseButtonVisible);
+      pauseButton.setVisible(isPauseButtonVisible);
 
-    // Update state
-    if (!pauseButton.isVisible()) { // Play state
-      activeShape.moveDown();
+      if (!pauseButton.isVisible()) { // Play state
+        activeShape.moveDown();
 
-      if (isCollided(activeShape)) {
-        shapes.add(activeShape);
+        if (isCollided(activeShape)) {
+          gameOver = activeShape.getYPosition() == canvasSquareHeight;
+          shapes.add(activeShape);
 
-        checkAllLines();
+          checkAllLines();
 
-        activeShape = nextShape;
-        activeShape.setxPos(centerX);
-        nextShape = pickNextShape();
+          activeShape = nextShape;
+          activeShape.setxPos(centerX);
+          nextShape = pickNextShape();
+        }
       }
+    } else {
+      gameOverLabel.setVisible(true);
     }
   }
 
@@ -296,6 +304,9 @@ public class TetrisMainCanvas extends Canvas {
 
     if (pauseButton.isVisible()) { // Maybe we can refactor this to be built inside draw?
       pauseButton.draw(xPos + (width / 2), yPos + (height / 2), g);
+    }
+    if (gameOver) {
+      gameOverLabel.draw(xPos + (width / 2), yPos + (height / 2), g);
     }
 
     quitButton.draw(canvasXMax + 100, yPos + (height - 20), g);
