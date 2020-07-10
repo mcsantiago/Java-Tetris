@@ -5,40 +5,37 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 enum GameState {
-  RUNNING,
-  PAUSED,
-  EXIT
+  RUNNING, PAUSED, EXIT
 }
+
 
 @SuppressWarnings("serial")
 public class TetrisWindow extends Frame {
-  private static final double MS_PER_UPDATE = 200;
+  private static final double MS_PER_UPDATE = 300;
   GameState currentState = GameState.RUNNING;
   TetrisMainCanvas canvas = new TetrisMainCanvas();
 
   private void init() {
-    addWindowListener(
-        new WindowAdapter() {
-          @Override
-          public void windowClosing(WindowEvent e) {
-            currentState = GameState.EXIT;
-            System.out.println("System exiting");
-            System.exit(0);
-          }
-        });
-    addKeyListener(
-        new KeyAdapter() {
-          @Override
-          public void keyPressed(KeyEvent e) {
-            super.keyPressed(e);
-            int keyCode = e.getKeyCode();
-            System.out.println("Key pressed! " + keyCode);
+    addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent e) {
+        currentState = GameState.EXIT;
+        System.out.println("System exiting");
+        System.exit(0);
+      }
+    });
+    addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(KeyEvent e) {
+        super.keyPressed(e);
+        int keyCode = e.getKeyCode();
+        System.out.println("Key pressed! " + keyCode);
 
-            if (keyCode == KeyEvent.VK_ESCAPE) {
-              togglePausedState();
-            }
-          }
-        });
+        if (keyCode == KeyEvent.VK_ESCAPE) {
+          togglePausedState();
+        }
+      }
+    });
     setTitle("Assignment 2");
     setBackground(Color.white);
     setSize(600, 800);

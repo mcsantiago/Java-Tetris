@@ -61,9 +61,12 @@ public class TetrisMainCanvas extends Canvas {
     height = canvasYMax - yPos;
 
     shapes = new ArrayList<>();
+    shapes.add(new IShape(0, 0)); // DEBUG
+    shapes.add(new IShape(4, 0)); // DEBUG
 
-    activeShape = pickNextShape();
-    activeShape.setxPos(centerX);
+    // activeShape = pickNextShape();
+    // activeShape.setxPos(centerX);
+    activeShape = new OShape(8, canvasSquareHeight - 5); // DEBUG
     nextShape = pickNextShape();
 
     setSize(uLength * canvasSquareWidth, uLength * canvasSquareHeight);
@@ -151,17 +154,54 @@ public class TetrisMainCanvas extends Canvas {
 
     // Update state
     if (!pauseButton.isVisible()) { // Play state
-      // // Move active square down by 1
       activeShape.moveDown();
 
       if (isCollided(activeShape)) {
-        // activeShape.moveDown(); // Corrected position
         shapes.add(activeShape);
+        for (int r = 0; r < canvasSquareHeight; r++) {
+          if (checkLine(r)) {
+            System.out.println("Row " + r + " is full!");
+            lines++;
+            dropLine(r);
+          }
+        }
+
         activeShape = nextShape;
         activeShape.setxPos(centerX);
         nextShape = pickNextShape();
       }
     }
+  }
+
+  private void dropLine(int row) {
+    for (Shape shape : shapes) {
+      shape.removeSquaresInRow(row);
+    }
+    shapes.removeIf(s -> s.getSquares().isEmpty());
+  }
+
+  /**
+   * Checks each line in the play area if all squares have been filled This method runs in O(M)
+   * Where M = Shapes. This is fine if M dominates the number of squares per shape (no more than 4)
+   */
+  private boolean checkLine(int row) {
+    int bit_vector = 0;
+
+    // a line is complete when first W bits are set
+    // assume W is no greater than 32
+    int complete_mask = (1 << canvasSquareWidth) - 1;
+
+    for (Shape shape : shapes) {
+      byte[] positions = shape.getPositionsInLine(row);
+      for (int x = 0; x < positions.length; x++) {
+        if (positions[x] > -1) {
+          bit_vector |= 1 << positions[x];
+        }
+      }
+    }
+
+    // This case is only true if entire line is filled
+    return (bit_vector == complete_mask);
   }
 
   private boolean isWithinCanvas(double x, double y) {

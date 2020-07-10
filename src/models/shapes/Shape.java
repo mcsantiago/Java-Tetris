@@ -180,4 +180,35 @@ public abstract class Shape {
       }
     }
   }
+
+  public byte[] getPositionsInLine(int row) {
+    byte[] positions = new byte[squares.size()];
+    for (int i = 0; i < positions.length; i++) {
+      positions[i] = -1;
+    }
+
+    for (int i = 0; i < squares.size(); i++) {
+      UnitSquare square = squares.get(i);
+      if (square.getCanvasY() == row) {
+        positions[i] = (byte) square.getCanvasX();
+      }
+    }
+
+    return positions;
+  }
+
+  public void removeSquaresInRow(int row) {
+    int i = 0;
+    while (i < squares.size()) {
+      UnitSquare square = squares.get(i);
+      if (square.getCanvasY() == row) {
+        System.out.println("Removing Square");
+        squares.remove(i);
+      } else {
+        i++;
+      }
+    }
+
+    moveDown();
+  }
 }
