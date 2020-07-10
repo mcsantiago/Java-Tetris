@@ -14,7 +14,7 @@ import models.shapes.Shape;
 import utils.GraphicsUtils;
 
 @SuppressWarnings("serial")
-public class TetrisMainCanvas extends Canvas {
+public class TetrisMainCanvas extends DoubleBuffer {
   private Dimension d;
 
   private int canvasSquareWidth = 10; // 10 squares wide
@@ -288,7 +288,8 @@ public class TetrisMainCanvas extends Canvas {
   }
 
   /** Draws the entire canvas */
-  public void paint(Graphics g) {
+  @Override
+  public void paintBuffer(Graphics g) {
     Graphics2D g2 = (Graphics2D) g;
 
     // Draw score labels
