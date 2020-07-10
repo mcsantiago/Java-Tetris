@@ -48,6 +48,8 @@ public class TetrisMainCanvas extends Canvas {
   private Shape nextShape;
 
   private int M = 1, N = 20, S = 1;
+  private int fallSpeed = 400; // ms
+  private float currentLag = 0;
 
   private boolean gameOver = false;
 
@@ -151,8 +153,9 @@ public class TetrisMainCanvas extends Canvas {
   }
 
   /** Updates the entire canvas */
-  public void updateStep() {
+  public void updateStep(float lag) {
     if (!gameOver) {
+      currentLag += lag;
       Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
 
       double relativeMouseX = currentMousePos.x - this.getLocationOnScreen().x;
@@ -163,7 +166,10 @@ public class TetrisMainCanvas extends Canvas {
       pauseButton.setVisible(isPauseButtonVisible);
 
       if (!pauseButton.isVisible()) { // Play state
-        activeShape.moveDown();
+        if (currentLag > fallSpeed) {
+          activeShape.moveDown();
+          currentLag = 0;
+        }
 
         if (isCollided(activeShape)) {
           gameOver = activeShape.getYPosition() == canvasSquareHeight;

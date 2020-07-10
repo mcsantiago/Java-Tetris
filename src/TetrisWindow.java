@@ -11,7 +11,7 @@ enum GameState {
 
 @SuppressWarnings("serial")
 public class TetrisWindow extends Frame {
-  private static final double MS_PER_UPDATE = 300;
+  private static final double MS_PER_UPDATE = 32; // 30 FPS
   GameState currentState = GameState.RUNNING;
   TetrisMainCanvas canvas = new TetrisMainCanvas();
 
@@ -63,7 +63,7 @@ public class TetrisWindow extends Frame {
       lastTime = current;
       lag += elapsed;
       while (lag >= MS_PER_UPDATE) {
-        canvas.updateStep();
+        canvas.updateStep((float) lag);
         canvas.repaint();
         lag -= MS_PER_UPDATE;
       }
