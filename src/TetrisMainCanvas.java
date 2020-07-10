@@ -45,6 +45,8 @@ public class TetrisMainCanvas extends Canvas {
   private Shape activeShape;
   private Shape nextShape;
 
+  private int M = 1, N = 20, S = 1;
+
   public TetrisMainCanvas() {
     d = new Dimension(600, 778);
     xPos = 10;
@@ -61,8 +63,6 @@ public class TetrisMainCanvas extends Canvas {
     height = canvasYMax - yPos;
 
     shapes = new ArrayList<>();
-    shapes.add(new IShape(0, 0)); // DEBUG
-    shapes.add(new IShape(4, 0)); // DEBUG
     shapes.add(new IShape(0, 1)); // DEBUG
     shapes.add(new IShape(4, 1)); // DEBUG
 
@@ -161,13 +161,7 @@ public class TetrisMainCanvas extends Canvas {
       if (isCollided(activeShape)) {
         shapes.add(activeShape);
 
-        for (int r = canvasSquareHeight - 1; r >= 0; r--) {
-          while (checkLine(r)) {
-            System.out.println("Row " + r + " is full!");
-            lines++;
-            dropLine(r);
-          }
-        }
+        checkAllLines();
 
         activeShape = nextShape;
         activeShape.setxPos(centerX);
@@ -176,11 +170,29 @@ public class TetrisMainCanvas extends Canvas {
     }
   }
 
+  private void updateScores() {
+    lines++;
+    score += level * M;
+  }
+
   private void dropLine(int row) {
     for (Shape shape : shapes) {
       shape.removeSquaresInRow(row);
     }
     shapes.removeIf(s -> s.getSquares().isEmpty());
+  }
+
+  /**
+   * Check entire grid for lines and reconciles them
+   */
+  private void checkAllLines() {
+    for (int r = canvasSquareHeight - 1; r >= 0; r--) {
+      while (checkLine(r)) {
+        System.out.println("Row " + r + " is full!");
+        updateScores();
+        dropLine(r);
+      }
+    }
   }
 
   /**
