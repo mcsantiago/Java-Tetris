@@ -47,7 +47,7 @@ public class TetrisMainCanvas extends Canvas {
   private Shape activeShape;
   private Shape nextShape;
 
-  private int M = 1, N = 20, S = 1;
+  private int M = 1, N = 1, S = 1, FS = 1;
   private int fallSpeed = 400; // ms
   private float currentLag = 0;
 
@@ -172,7 +172,8 @@ public class TetrisMainCanvas extends Canvas {
         }
 
         if (isCollided(activeShape)) {
-          gameOver = activeShape.getYPosition() == canvasSquareHeight;
+          System.out.println("YPos " + activeShape.getYPosition());
+          gameOver = activeShape.getYPosition() >= canvasSquareHeight - 1;
           shapes.add(activeShape);
 
           checkAllLines();
@@ -183,6 +184,7 @@ public class TetrisMainCanvas extends Canvas {
         }
       }
     } else {
+      System.out.println("Game over!");
       gameOverLabel.setVisible(true);
     }
   }
@@ -190,6 +192,13 @@ public class TetrisMainCanvas extends Canvas {
   private void updateScores() {
     lines++;
     score += level * M;
+
+    if (lines >= N) {
+      level++;
+      FS *= (1 + level * S);
+      fallSpeed /= (FS * .4); // Scale that shit way down
+      System.out.println("FALLSPEED: " + fallSpeed);
+    }
   }
 
   private void dropLine(int row) {
