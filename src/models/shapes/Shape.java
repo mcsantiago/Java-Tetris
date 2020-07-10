@@ -199,6 +199,8 @@ public abstract class Shape {
 
   public void removeSquaresInRow(int row) {
     squares.removeIf(s -> s.getCanvasY() == row);
-    moveDown();
+    boolean isAboveLine = squares.stream().anyMatch(s -> s.getCanvasY() < row);
+    if (isAboveLine)
+      moveDown();
   }
 }

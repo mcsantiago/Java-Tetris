@@ -63,8 +63,11 @@ public class TetrisMainCanvas extends Canvas {
     height = canvasYMax - yPos;
 
     shapes = new ArrayList<>();
+    shapes.add(new IShape(0, 0)); // DEBUG
+    shapes.add(new IShape(4, 0)); // DEBUG
     shapes.add(new IShape(0, 1)); // DEBUG
     shapes.add(new IShape(4, 1)); // DEBUG
+    shapes.add(new IShape(0, 2)); // DEBUG
 
     // activeShape = pickNextShape();
     // activeShape.setxPos(centerX);
