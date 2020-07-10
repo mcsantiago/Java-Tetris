@@ -63,6 +63,8 @@ public class TetrisMainCanvas extends Canvas {
     shapes = new ArrayList<>();
     shapes.add(new IShape(0, 0)); // DEBUG
     shapes.add(new IShape(4, 0)); // DEBUG
+    shapes.add(new IShape(0, 1)); // DEBUG
+    shapes.add(new IShape(4, 1)); // DEBUG
 
     // activeShape = pickNextShape();
     // activeShape.setxPos(centerX);
@@ -158,8 +160,9 @@ public class TetrisMainCanvas extends Canvas {
 
       if (isCollided(activeShape)) {
         shapes.add(activeShape);
-        for (int r = 0; r < canvasSquareHeight; r++) {
-          if (checkLine(r)) {
+
+        for (int r = canvasSquareHeight - 1; r >= 0; r--) {
+          while (checkLine(r)) {
             System.out.println("Row " + r + " is full!");
             lines++;
             dropLine(r);
