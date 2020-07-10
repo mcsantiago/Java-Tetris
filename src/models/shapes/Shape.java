@@ -198,17 +198,7 @@ public abstract class Shape {
   }
 
   public void removeSquaresInRow(int row) {
-    int i = 0;
-    while (i < squares.size()) {
-      UnitSquare square = squares.get(i);
-      if (square.getCanvasY() == row) {
-        System.out.println("Removing Square");
-        squares.remove(i);
-      } else {
-        i++;
-      }
-    }
-
+    squares.removeIf(s -> s.getCanvasY() == row);
     moveDown();
   }
 }
