@@ -25,14 +25,14 @@ public abstract class Shape {
   }
 
   public void moveUp() {
-    yPos--;
+    yPos++;
     for (UnitSquare square : squares) {
       square.incCanvasYBy(-1);
     }
   }
 
   public void moveDown() {
-    yPos++;
+    yPos--;
     for (UnitSquare square : squares) {
       square.incCanvasYBy(1);
     }
