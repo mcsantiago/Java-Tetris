@@ -24,6 +24,14 @@ public abstract class Shape {
     }
   }
 
+  public void setyPos(int yPos) {
+    int dy = -(yPos - this.yPos);
+    this.yPos += dy;
+    for (UnitSquare square : squares) {
+      square.incCanvasYBy(dy);
+    }
+  }
+
   public void moveUp() {
     yPos++;
     for (UnitSquare square : squares) {
@@ -207,4 +215,5 @@ public abstract class Shape {
   public int getYPosition() {
     return this.yPos;
   }
+
 }

@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import javax.swing.JSlider;
 import models.buttons.GameOverLabel;
 import models.buttons.PauseButton;
 import models.buttons.QuitButton;
@@ -47,7 +48,7 @@ public class TetrisMainCanvas extends DoubleBuffer {
   private Shape activeShape;
   private Shape nextShape;
 
-  private int M = 1, N = 1, S = 1, FS = 1;
+  private int M = 1, N = 2, S = 1, FS = 1;
   private int fallSpeed = 400; // ms
   private float currentLag = 0;
 
@@ -74,6 +75,8 @@ public class TetrisMainCanvas extends DoubleBuffer {
     shapes.add(new IShape(0, 1)); // DEBUG
     shapes.add(new IShape(4, 1)); // DEBUG
     shapes.add(new IShape(0, 2)); // DEBUG
+
+    initializeUIComponents();
 
     // activeShape = pickNextShape();
     // activeShape.setxPos(centerX);
@@ -134,6 +137,24 @@ public class TetrisMainCanvas extends DoubleBuffer {
     });
   }
 
+  private void initializeUIComponents() {
+    // Sliders
+    JSlider m_slider = new JSlider(JSlider.HORIZONTAL, 1, 15, M);
+    m_slider.setMinorTickSpacing(1);
+    m_slider.setMajorTickSpacing(5);
+    m_slider.setPaintTicks(true);
+
+    // JSlider n_slider = new JSlider(JSlider.HORIZONTAL, 20, 40, N);
+    // n_slider.setMinorTickSpacing(1);
+    // n_slider.setMajorTickSpacing(5);
+    // n_slider.setPaintTicks(true);
+
+    // JSlider s_slider = new JSlider(JSlider.HORIZONTAL, 1, 10, S);
+    // s_slider.setMinorTickSpacing(1);
+    // s_slider.setMajorTickSpacing(5);
+    // s_slider.setPaintTicks(true);
+  }
+
   private Dimension recalculateDimensions(Dimension newSize) {
     int new_width = (newSize.height * d.width) / d.height; // scale width to maintain aspect ratio
     return new Dimension(new_width, newSize.height);
@@ -180,6 +201,7 @@ public class TetrisMainCanvas extends DoubleBuffer {
 
           activeShape = nextShape;
           activeShape.setxPos(centerX);
+          activeShape.setyPos(canvasSquareHeight - 1);
           nextShape = pickNextShape();
         }
       }
@@ -196,6 +218,7 @@ public class TetrisMainCanvas extends DoubleBuffer {
       level++;
       FS *= (1 + level * S);
       fallSpeed /= (FS * .4); // Scale that shit way down
+      System.out.println("FS: " + FS);
       System.out.println("FALLSPEED: " + fallSpeed);
     }
   }
@@ -261,25 +284,25 @@ public class TetrisMainCanvas extends DoubleBuffer {
     int nextShapeId = ThreadLocalRandom.current().nextInt(0, 7);
     switch (nextShapeId) {
       case 0: {
-        return new OShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+        return new OShape(canvasSquareWidth + 3, canvasSquareHeight - 2);
       }
       case 1: {
-        return new TShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+        return new TShape(canvasSquareWidth + 3, canvasSquareHeight - 2);
       }
       case 2: {
-        return new IShape(canvasSquareWidth + 2, canvasSquareHeight - 1);
+        return new IShape(canvasSquareWidth + 2, canvasSquareHeight - 2);
       }
       case 3: {
-        return new LShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+        return new LShape(canvasSquareWidth + 3, canvasSquareHeight - 2);
       }
       case 4: {
-        return new JShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+        return new JShape(canvasSquareWidth + 3, canvasSquareHeight - 2);
       }
       case 5: {
-        return new SShape(canvasSquareWidth + 4, canvasSquareHeight - 1);
+        return new SShape(canvasSquareWidth + 4, canvasSquareHeight - 2);
       }
       case 6: {
-        return new ZShape(canvasSquareWidth + 3, canvasSquareHeight - 1);
+        return new ZShape(canvasSquareWidth + 3, canvasSquareHeight - 2);
       }
       default:
         throw new IndexOutOfBoundsException("Shape not found");
@@ -288,8 +311,10 @@ public class TetrisMainCanvas extends DoubleBuffer {
 
   /** Draws the entire canvas */
   @Override
-  public void paintBuffer(Graphics g) {
+  public void paint(Graphics g) {
     Graphics2D g2 = (Graphics2D) g;
+    Dimension d = getSize();
+    g.clearRect(0, 0, (int) d.getWidth(), (int) d.getHeight());
 
     // Draw score labels
     g.setColor(Color.BLACK);
@@ -325,6 +350,7 @@ public class TetrisMainCanvas extends DoubleBuffer {
     }
 
     quitButton.draw(canvasXMax + 100, yPos + (height - 20), g);
+
   }
 
   private void drawShape(Shape shape, Graphics g) {

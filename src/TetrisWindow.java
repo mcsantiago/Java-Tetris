@@ -3,6 +3,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 
 enum GameState {
   RUNNING, PAUSED, EXIT
@@ -10,7 +11,7 @@ enum GameState {
 
 
 @SuppressWarnings("serial")
-public class TetrisWindow extends Frame {
+public class TetrisWindow extends JFrame {
   private static final double MS_PER_UPDATE = 32; // 30 FPS
   GameState currentState = GameState.RUNNING;
   TetrisMainCanvas canvas = new TetrisMainCanvas();
@@ -24,6 +25,7 @@ public class TetrisWindow extends Frame {
         System.exit(0);
       }
     });
+
     addKeyListener(new KeyAdapter() {
       @Override
       public void keyPressed(KeyEvent e) {

@@ -1,7 +1,8 @@
 import java.awt.*;
+import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class DoubleBuffer extends Canvas {
+public class DoubleBuffer extends JPanel {
   private int bufferWidth;
   private int bufferHeight;
   private Image bufferImage;
