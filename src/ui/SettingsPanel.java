@@ -9,17 +9,13 @@ import java.awt.*;
 import models.GameState;
 
 @SuppressWarnings("serial")
-public class SlidersPanel extends JPanel {
+public class SettingsPanel extends JPanel {
   GameState state;
 
-  public SlidersPanel(GameState state) {
+  public SettingsPanel(GameState state) {
     this.state = state;
 
-    JSlider m_slider = new JSlider(JSlider.HORIZONTAL, 1, 15, state.getM());
-    m_slider.setSnapToTicks(true);
-    m_slider.setMinorTickSpacing(1);
-    m_slider.setMajorTickSpacing(5);
-    m_slider.setPaintTicks(true);
+    DiscreteSlider m_slider = new DiscreteSlider(JSlider.HORIZONTAL, 1, 15, state.getM(), 1, 5);
     m_slider.addChangeListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent e) {
@@ -27,11 +23,7 @@ public class SlidersPanel extends JPanel {
       }
     });
 
-    JSlider n_slider = new JSlider(JSlider.HORIZONTAL, 20, 40, state.getN());
-    n_slider.setSnapToTicks(true);
-    n_slider.setMinorTickSpacing(1);
-    n_slider.setMajorTickSpacing(5);
-    n_slider.setPaintTicks(true);
+    DiscreteSlider n_slider = new DiscreteSlider(JSlider.HORIZONTAL, 20, 40, state.getN(), 1, 10);
     n_slider.addChangeListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent e) {
@@ -39,11 +31,7 @@ public class SlidersPanel extends JPanel {
       }
     });
 
-    JSlider s_slider = new JSlider(JSlider.HORIZONTAL, 20, 40, state.getN());
-    n_slider.setSnapToTicks(true);
-    s_slider.setMinorTickSpacing(1);
-    s_slider.setMajorTickSpacing(5);
-    s_slider.setPaintTicks(true);
+    DiscreteSlider s_slider = new DiscreteSlider(JSlider.HORIZONTAL, 1, 100, state.getN(), 1, 10);
     s_slider.addChangeListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent e) {

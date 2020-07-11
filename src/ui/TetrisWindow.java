@@ -14,7 +14,7 @@ public class TetrisWindow extends JFrame {
   private static final double MS_PER_UPDATE = 32; // 30 FPS
   GameState state = new GameState();
   TetrisMainCanvas canvas = new TetrisMainCanvas(state);
-  SlidersPanel panel = new SlidersPanel(state);
+  SettingsPanel panel = new SettingsPanel(state);
 
   private void init() {
     addWindowListener(new WindowAdapter() {
