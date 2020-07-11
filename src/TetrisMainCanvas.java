@@ -48,13 +48,14 @@ public class TetrisMainCanvas extends DoubleBuffer {
   private Shape activeShape;
   private Shape nextShape;
 
-  private int M = 1, N = 2, S = 1, FS = 1;
+  // private int M = 1, N = 2, S = 1, FS = 1;
   private int fallSpeed = 400; // ms
   private float currentLag = 0;
 
   private boolean gameOver = false;
+  private GameState state;
 
-  public TetrisMainCanvas() {
+  public TetrisMainCanvas(GameState state) {
     d = new Dimension(600, 778);
     xPos = 10;
     yPos = 10;
@@ -65,6 +66,8 @@ public class TetrisMainCanvas extends DoubleBuffer {
                                                                                   // the main canvas
     canvasYMax = Math.round((yPos + (canvasSquareHeight * uLength)) * heightRatio); // bottom-right
                                                                                     // of the main
+
+    this.state = state;
     // canvas
     width = canvasXMax - xPos;
     height = canvasYMax - yPos;
@@ -139,7 +142,7 @@ public class TetrisMainCanvas extends DoubleBuffer {
 
   private void initializeUIComponents() {
     // Sliders
-    JSlider m_slider = new JSlider(JSlider.HORIZONTAL, 1, 15, M);
+    JSlider m_slider = new JSlider(JSlider.HORIZONTAL, 1, 15, state.getM());
     m_slider.setMinorTickSpacing(1);
     m_slider.setMajorTickSpacing(5);
     m_slider.setPaintTicks(true);
@@ -212,13 +215,13 @@ public class TetrisMainCanvas extends DoubleBuffer {
 
   private void updateScores() {
     lines++;
-    score += level * M;
+    score += level * state.getM();
 
-    if (lines >= N) {
+    if (lines >= state.getN()) {
       level++;
-      FS *= (1 + level * S);
-      fallSpeed /= (FS * .4); // Scale that shit way down
-      System.out.println("FS: " + FS);
+      state.setFs(state.getFs() * (1 + level * state.getS()));
+      fallSpeed /= (state.getFs() * .4); // Scale that shit way down
+      System.out.println("FS: " + state.getFs());
       System.out.println("FALLSPEED: " + fallSpeed);
     }
   }
