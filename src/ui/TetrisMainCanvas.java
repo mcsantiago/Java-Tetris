@@ -1,3 +1,5 @@
+package ui;
+
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -7,6 +9,7 @@ import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JSlider;
+import models.GameState;
 import models.buttons.GameOverLabel;
 import models.buttons.PauseButton;
 import models.buttons.QuitButton;

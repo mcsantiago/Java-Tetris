@@ -1,3 +1,4 @@
+package models;
 
 /**
  * Container object for all game state to be passed between UI Components..
