@@ -184,7 +184,6 @@ public class TetrisMainCanvas extends DoubleBuffer {
         }
       }
     } else {
-      System.out.println("Game over!");
       gameOverLabel.setVisible(true);
     }
   }

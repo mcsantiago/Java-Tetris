@@ -1,8 +1,6 @@
 import java.awt.*;
 
-/**
- * Based off of https://www.codeproject.com/Articles/2136/Double-buffer-in-standard-Java-AWT
- */
+@SuppressWarnings("serial")
 public class DoubleBuffer extends Canvas {
   private int bufferWidth;
   private int bufferHeight;
@@ -16,8 +14,10 @@ public class DoubleBuffer extends Canvas {
   @Override
   public void paint(Graphics g) {
     if (bufferWidth != getSize().width || bufferHeight != getSize().height || bufferImage == null
-        || bufferGraphics == null)
+        || bufferGraphics == null) {
+      System.out.println("Resetting buffer");
       resetBuffer();
+    }
 
     if (bufferGraphics != null) {
       bufferGraphics.clearRect(0, 0, bufferWidth, bufferHeight);
