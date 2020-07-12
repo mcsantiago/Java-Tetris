@@ -212,8 +212,22 @@ public abstract class Shape {
       moveDown();
   }
 
+  public int getXPosition() {
+    return this.xPos;
+  }
+
   public int getYPosition() {
     return this.yPos;
   }
+
+  public boolean isPointWithin(Point mouseUnitPosition) {
+    boolean isWithin = false;
+    for (UnitSquare square : squares) {
+      isWithin |= mouseUnitPosition.getX() == square.getCanvasX()
+          && mouseUnitPosition.getY() == square.getCanvasY();
+    }
+    return isWithin;
+  }
+
 
 }
