@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
-import javax.swing.JSlider;
 import models.GameState;
 import models.buttons.GameOverLabel;
 import models.buttons.PauseButton;
@@ -49,8 +48,11 @@ public class TetrisMainCanvas extends DoubleBuffer {
   private Shape nextShape;
 
   // private int M = 1, N = 2, S = 1, FS = 1;
+  private int shapeSwitchRate = 500; // ms
+  private float currentShapeSwitchRateLag = 0;
+
   private int fallSpeed = 400; // ms
-  private float currentLag = 0;
+  private float currentFallLag = 0;
 
   private boolean gameOver = false;
   private GameState state;
@@ -77,15 +79,8 @@ public class TetrisMainCanvas extends DoubleBuffer {
     height = canvasYMax - yPos;
 
     shapes = new ArrayList<>();
-    shapes.add(new IShape(0, 0)); // DEBUG
-    shapes.add(new IShape(4, 0)); // DEBUG
-    shapes.add(new IShape(0, 1)); // DEBUG
-    shapes.add(new IShape(4, 1)); // DEBUG
-    shapes.add(new IShape(0, 2)); // DEBUG
 
-    // activeShape = pickNextShape();
-    // activeShape.setxPos(centerX);
-    activeShape = new OShape(8, state.getCanvasSquareHeight() - 5); // DEBUG
+    setActiveShape(pickNextShape());
     nextShape = pickNextShape();
 
     setSize(state.getuLength() * state.getCanvasSquareWidth(),
@@ -174,7 +169,7 @@ public class TetrisMainCanvas extends DoubleBuffer {
     height = canvasYMax - yPos;
 
     if (!gameOver) {
-      currentLag += lag;
+      currentFallLag += lag;
       Point currentMousePos = MouseInfo.getPointerInfo().getLocation();
 
       double relativeMouseX = currentMousePos.x - this.getLocationOnScreen().x;
@@ -185,27 +180,54 @@ public class TetrisMainCanvas extends DoubleBuffer {
       pauseButton.setVisible(isPauseButtonVisible);
 
       if (!pauseButton.isVisible()) { // Play state
-        if (currentLag > fallSpeed) {
+        if (currentFallLag > fallSpeed) {
           activeShape.moveDown();
-          currentLag = 0;
+          currentFallLag = 0;
         }
 
         if (isCollided(activeShape)) {
-          System.out.println("YPos " + activeShape.getYPosition());
           gameOver = activeShape.getYPosition() >= state.getCanvasSquareHeight() - 1;
           shapes.add(activeShape);
 
           checkAllLines();
 
-          activeShape = nextShape;
-          activeShape.setxPos(centerX);
-          activeShape.setyPos(state.getCanvasSquareHeight() - 1);
+          setActiveShape(nextShape);
           nextShape = pickNextShape();
+        }
+      } else {
+        currentShapeSwitchRateLag += lag;
+        // Pause state
+        Point mouseUnitPosition = getUnitPosition(relativeMouseX, relativeMouseY);
+        if (activeShape.isPointWithin(mouseUnitPosition)) {
+          if (currentShapeSwitchRateLag > shapeSwitchRate) {
+            Shape shape = pickNextShape();
+            while (nextShape.getClass() == shape.getClass()
+                || activeShape.getClass() == shape.getClass()) {
+              // Keep picking until a unique one is found
+              shape = pickNextShape();
+            }
+            setActiveShape(shape);
+            currentShapeSwitchRateLag = 0;
+          }
         }
       }
     } else {
       gameOverLabel.setVisible(true);
     }
+  }
+
+  private void setActiveShape(Shape shape) {
+    activeShape = shape;
+    activeShape.setxPos(centerX);
+    activeShape.setyPos(state.getCanvasSquareHeight() - 1);
+    score -= level * state.getM();
+  }
+
+  private Point getUnitPosition(double relativeMouseX, double relativeMouseY) {
+    int uLength = state.getuLength();
+    int x = ((int) relativeMouseX - xPos) / uLength;
+    int y = ((int) relativeMouseY - yPos) / uLength;
+    return new Point(x, y);
   }
 
   private void updateScores() {
