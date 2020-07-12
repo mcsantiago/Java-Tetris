@@ -1,26 +1,25 @@
+package ui;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
-
-enum GameState {
-  RUNNING, PAUSED, EXIT
-}
+import models.GameState;
 
 
 @SuppressWarnings("serial")
 public class TetrisWindow extends JFrame {
   private static final double MS_PER_UPDATE = 32; // 30 FPS
-  GameState currentState = GameState.RUNNING;
-  TetrisMainCanvas canvas = new TetrisMainCanvas();
+  private GameState state = new GameState();
+  private TetrisMainCanvas canvas = new TetrisMainCanvas(state);
+  private SettingsPanel panel = new SettingsPanel(state);
 
   private void init() {
     addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
-        currentState = GameState.EXIT;
         System.out.println("System exiting");
         System.exit(0);
       }
@@ -32,25 +31,17 @@ public class TetrisWindow extends JFrame {
         super.keyPressed(e);
         int keyCode = e.getKeyCode();
         System.out.println("Key pressed! " + keyCode);
-
-        if (keyCode == KeyEvent.VK_ESCAPE) {
-          togglePausedState();
-        }
       }
     });
-    setTitle("Assignment 2");
-    setBackground(Color.white);
-    setSize(600, 800);
-    add(canvas);
-    setVisible(true);
-  }
 
-  private void togglePausedState() {
-    if (currentState == GameState.PAUSED) {
-      currentState = GameState.RUNNING;
-    } else if (currentState == GameState.RUNNING) {
-      currentState = GameState.PAUSED;
-    }
+
+    setTitle("Assignment 3");
+    setBackground(Color.white);
+    setSize(1200, 800);
+    setLayout(new GridLayout(1, 2));
+    add(canvas);
+    add(panel);
+    setVisible(true);
   }
 
   public void run() {
@@ -59,7 +50,7 @@ public class TetrisWindow extends JFrame {
     double lastTime = System.currentTimeMillis();
     double lag = 0.0;
 
-    while (currentState != GameState.EXIT) {
+    while (true) {
       double current = System.currentTimeMillis();
       double elapsed = current - lastTime;
       lastTime = current;
