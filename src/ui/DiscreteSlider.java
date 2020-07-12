@@ -1,6 +1,7 @@
 package ui;
 
 import javax.swing.JSlider;
+import java.awt.*;
 
 @SuppressWarnings("serial")
 public class DiscreteSlider extends JSlider {
@@ -12,5 +13,7 @@ public class DiscreteSlider extends JSlider {
     setMinorTickSpacing(majorTicks);
     setMajorTickSpacing(minorTicks);
     setPaintTicks(true);
+    setPaintLabels(true);
+    setBackground(Color.WHITE);
   }
 }

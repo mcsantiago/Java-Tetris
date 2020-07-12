@@ -4,12 +4,24 @@ package models;
  * Container object for all game state to be passed between UI Components..
  */
 public class GameState {
-  private int m, n, s, fs;
+  private int m, n, s, fs, currentState;
+  public final static int PLAY = 0;
+  public final static int PAUSED = 1;
+  public final static int QUIT = 2;
 
   public GameState() {
     m = 1; // Range 1-15
     n = 20; // Range 20-40
     s = 1; // Range 0.1-1.0 (1-10)
+    setCurrentState(PLAY);
+  }
+
+  public int getCurrentState() {
+    return currentState;
+  }
+
+  public void setCurrentState(int currentState) {
+    this.currentState = currentState;
   }
 
   public int getM() {
