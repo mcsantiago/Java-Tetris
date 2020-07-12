@@ -5,12 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JMenu;
 import models.GameState;
 
 
@@ -20,7 +15,6 @@ public class TetrisWindow extends JFrame {
   private GameState state = new GameState();
   private TetrisMainCanvas canvas = new TetrisMainCanvas(state);
   private SettingsPanel panel = new SettingsPanel(state);
-  private boolean inSettings = false;
 
   private void init() {
     addWindowListener(new WindowAdapter() {

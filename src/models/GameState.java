@@ -5,6 +5,7 @@ package models;
  */
 public class GameState {
   private int m, n, s, fs, currentState;
+  private int canvasSquareWidth, canvasSquareHeight, uLength;
   public final static int PLAY = 0;
   public final static int PAUSED = 1;
   public final static int QUIT = 2;
@@ -13,7 +14,35 @@ public class GameState {
     m = 1; // Range 1-15
     n = 20; // Range 20-40
     s = 1; // Range 0.1-1.0 (1-10)
-    setCurrentState(PLAY);
+
+    canvasSquareHeight = 20;
+    canvasSquareWidth = 10;
+    uLength = 40;
+    currentState = GameState.PLAY;
+  }
+
+  public int getuLength() {
+    return uLength;
+  }
+
+  public void setuLength(int uLength) {
+    this.uLength = uLength;
+  }
+
+  public int getCanvasSquareHeight() {
+    return canvasSquareHeight;
+  }
+
+  public void setCanvasSquareHeight(int canvasSquareHeight) {
+    this.canvasSquareHeight = canvasSquareHeight;
+  }
+
+  public int getCanvasSquareWidth() {
+    return canvasSquareWidth;
+  }
+
+  public void setCanvasSquareWidth(int canvasSquareWidth) {
+    this.canvasSquareWidth = canvasSquareWidth;
   }
 
   public int getCurrentState() {
