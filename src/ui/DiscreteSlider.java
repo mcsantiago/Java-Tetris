@@ -9,7 +9,6 @@ public class DiscreteSlider extends JSlider {
       int minorTicks) {
     super(orientation, min, max, currentValue);
 
-    setSnapToTicks(true);
     setMinorTickSpacing(majorTicks);
     setMajorTickSpacing(minorTicks);
     setPaintTicks(true);

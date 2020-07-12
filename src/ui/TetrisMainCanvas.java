@@ -83,8 +83,6 @@ public class TetrisMainCanvas extends DoubleBuffer {
     shapes.add(new IShape(4, 1)); // DEBUG
     shapes.add(new IShape(0, 2)); // DEBUG
 
-    initializeUIComponents();
-
     // activeShape = pickNextShape();
     // activeShape.setxPos(centerX);
     activeShape = new OShape(8, state.getCanvasSquareHeight() - 5); // DEBUG
@@ -143,24 +141,6 @@ public class TetrisMainCanvas extends DoubleBuffer {
         }
       }
     });
-  }
-
-  private void initializeUIComponents() {
-    // Sliders
-    JSlider m_slider = new JSlider(JSlider.HORIZONTAL, 1, 15, state.getM());
-    m_slider.setMinorTickSpacing(1);
-    m_slider.setMajorTickSpacing(5);
-    m_slider.setPaintTicks(true);
-
-    // JSlider n_slider = new JSlider(JSlider.HORIZONTAL, 20, 40, N);
-    // n_slider.setMinorTickSpacing(1);
-    // n_slider.setMajorTickSpacing(5);
-    // n_slider.setPaintTicks(true);
-
-    // JSlider s_slider = new JSlider(JSlider.HORIZONTAL, 1, 10, S);
-    // s_slider.setMinorTickSpacing(1);
-    // s_slider.setMajorTickSpacing(5);
-    // s_slider.setPaintTicks(true);
   }
 
   private Dimension recalculateDimensions(Dimension newSize) {
@@ -329,7 +309,7 @@ public class TetrisMainCanvas extends DoubleBuffer {
 
   /** Draws the entire canvas */
   @Override
-  public void paint(Graphics g) {
+  public void paintBuffer(Graphics g) {
     Graphics2D g2 = (Graphics2D) g;
     Dimension d = getSize();
     g.clearRect(0, 0, (int) d.getWidth(), (int) d.getHeight());

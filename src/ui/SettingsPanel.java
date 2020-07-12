@@ -98,7 +98,7 @@ public class SettingsPanel extends JPanel {
     heightPanel.add(heightSlider);
 
     DiscreteSlider unitLengthSlider =
-        new DiscreteSlider(JSlider.HORIZONTAL, 20, 60, state.getuLength(), 10, 1);
+        new DiscreteSlider(JSlider.HORIZONTAL, 20, 60, state.getuLength(), 10, 5);
     unitLengthSlider.addChangeListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent e) {
